@@ -36,7 +36,7 @@
                             </a>
                         </li>
                         <li class="treeview">
-                            <a href="#">
+                            <a href="route('UserList')">
                                 <i class="fa fa-bar-chart-o"></i>
                                 <span>User List</span>
                                 <i class="fa fa-angle-left pull-right"></i>

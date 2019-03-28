@@ -1,6 +1,9 @@
 @extends('master')
-@section('title','')
+@section('title','Edit')
 @section('content')
+@php
+    $defaultImg = $st->image == null ? asset('images/ImageDefault.png') : $st->image;
+@endphp
 <div class="row">
                         <!-- left column -->
                         <div class="col-md-6">
@@ -14,7 +17,7 @@
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Fullname :</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter fullname*">
+                                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter fullname*" value="{{}}">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Email :</label>
@@ -60,9 +63,16 @@
                                     <form role="form">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label for="exampleInputFile">Image :</label>
-                                            <input type="file" id="exampleInputFile">
-                                            <p class="help-block">Example block-level help text here.</p>
+                                             <div class="img">
+
+                                                    <img id="preview" src="{{asset($defaultImg)}}" class="img-responsive">
+
+                                                    </div>
+                                                    <br/>
+                                                    <div class="form-group">
+                                                        <label>Ảnh sản phẩm </label>
+                                                        <input type="file" name="image" onchange="encodeImageFileAsURL(this, 'preview')">
+                                                    </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Date of birth : </label>
@@ -73,4 +83,16 @@
                             </div><!-- /.box -->
                         </div><!--/.col (right) -->
                     </div>
+@endsection
+@section('pagejs')
+<script type="text/javascript">
+         function encodeImageFileAsURL(element, deploySelector) {
+            var file = element.files[0];
+            if(file == undefined){
+                $('#' + deploySelector).attr('src', $('#ImageDefault').val());
+                return false;
+            }
+            var reader = new FileReader();
+        }
+</script>
 @endsection

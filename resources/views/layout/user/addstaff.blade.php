@@ -16,19 +16,19 @@
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Fullname :</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter fullname*">
+                                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter fullname*" name="fullname">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Email :</label>
-                                            <input type="email" class="form-control" id="exampleInputPassword1" placeholder="Enter email*">
+                                            <input type="email" class="form-control" id="exampleInputPassword1" placeholder="Enter email*" name="email">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Address :</label>
-                                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter address*">
+                                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter address*" name="address">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Phone number :</label>
-                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Enter Phone number*">
+                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Enter Phone number*" name="phone">
                                         </div>
                                         <div class="form-group">
  											 <label for="sel1">Position:</label>
@@ -76,8 +76,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="exampleInputEmail1">Larary :</label>
+                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Enter Phone number*" name="larary">
+                                        </div>
+                                        <div class="form-group">
                                             <label>Date of birth : </label>
-                                            <input type="date" class="form-control"  disabled="">
+                                            <input type="date" class="form-control"  disabled="" name="dob">
                                         </div>
                                     </form>
                                 </div><!-- /.box-body -->
