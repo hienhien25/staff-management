@@ -14,8 +14,8 @@ class CreateTbldetailTable extends Migration
     public function up()
     {
         Schema::create('tbldetail', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('id_staff');
+            $table->increments('id')->unsigned();
+            $table->unsignedInteger('id_staff');
             $table->date('dob');
             $table->string('image');
             $table->double('larary');

@@ -14,7 +14,7 @@ class CreateTblpositionTable extends Migration
     public function up()
     {
         Schema::create('tblposition', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('position_name');
             $table->integer('quantity')->default(1);
             $table->text('description');

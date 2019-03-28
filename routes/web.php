@@ -11,6 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/','PageController@index')->name('home');
+Route::get('PositionList','PositionController@showlist')->name('PositionList');
+Route::get('StaffList/{id}.html','PositionController@showstafflist')->name('Position.StaffList');
+Route::get('addPosition','PositionController@getadd')->name('addPosition');
+Route::post('addPosition','PositionController@postadd')->name('addPosition');
+Route::get('UserList','UserController@showlist')->name('UserList');
+Route::get('addStaff','UserController@getadd')->name('user.addstaff');
+Route::post('addStaff','UserController@postadd')->name('user.addstaff');
+

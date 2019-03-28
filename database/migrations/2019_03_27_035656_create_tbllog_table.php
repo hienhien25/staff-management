@@ -14,7 +14,7 @@ class CreateTbllogTable extends Migration
     public function up()
     {
         Schema::create('tbllog', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('username');
             $table->datetime('date_log');
             $table->timestamps();

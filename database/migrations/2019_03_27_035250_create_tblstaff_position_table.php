@@ -14,9 +14,9 @@ class CreateTblstaffPositionTable extends Migration
     public function up()
     {
         Schema::create('tblstaff_position', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('id_position');
-            $table->integer('id_staff');
+            $table->increments('id')->unsigned();
+            $table->unsignedInteger('id_position');
+            $table->unsignedInteger('id_staff');
             $table->timestamps();
         });
     }
