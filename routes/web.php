@@ -20,4 +20,5 @@ Route::post('addPosition','PositionController@postadd')->name('addPosition');
 Route::get('UserList','UserController@showlist')->name('UserList');
 Route::get('addStaff','UserController@getadd')->name('user.addstaff');
 Route::post('addStaff','UserController@postadd')->name('user.addstaff');
-
+Route::get('editStaff/{id}.html','UserController@getedit')->name('user.editStaff');
+Route::post('editStaff/{id}.html','UserController@edit')->name('user.editStaff');
