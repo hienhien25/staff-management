@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTbllogTable extends Migration
+class CreateTblemailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateTbllogTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbllog', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->string('username');
-            $table->datetime('date_log');
+        Schema::create('tblemail', function (Blueprint $table) {
+            $table->increments('id');
+            $table->text('title');
+            $table->text('content');
+            $table->string('user_recive')->unable();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateTbllogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbllog');
+        Schema::dropIfExists('tblemail');
     }
 }

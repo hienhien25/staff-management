@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblstaffPositionTable extends Migration
+class CreateTbllogTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateTblstaffPositionTable extends Migration
      */
     public function up()
     {
-        Schema::create('tblstaff_position', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->unsignedInteger('id_position');
-            $table->unsignedInteger('id_staff');
+        Schema::create('tbllog', function (Blueprint $table) {
+            $table->increments('id');
+            $table->datetime('datetime_log');
+            $table->string('action');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateTblstaffPositionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblstaff_position');
+        Schema::dropIfExists('tbllog');
     }
 }

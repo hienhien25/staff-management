@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblcheckinTable extends Migration
+class CreateTbldepartmentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateTblcheckinTable extends Migration
      */
     public function up()
     {
-        Schema::create('tblcheckin', function (Blueprint $table) {
+        Schema::create('tbldepartment', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_staff');
-            $table->time('start_hour')->default('8:30');
-            $table->time('finish_hour')->default('5:30');
-            $table->date('check_date');
+            $table->string('department_name');
+            $table->integer('quantity')->default(1);
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateTblcheckinTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblcheckin');
+        Schema::dropIfExists('tbldepartment');
     }
 }
