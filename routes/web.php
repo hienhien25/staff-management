@@ -12,13 +12,14 @@
 */
 
 
-Route::get('/','PageController@index')->name('home');
+
 Route::get('adminlogin','PageController@getlogin')->name('adminlogin');
 Route::post('adminlogin','PageController@postlogin')->name('adminlogin');
 Route::get('logout','PageController@logout')->name('logout');
 Route::get('register','PageController@getregister')->name('register');
 Route::post('register','PageController@postregister')->name('register');
-Route::group(['prefix'=>'admin'],function(){
+Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
+	Route::get('/','PageController@index')->name('home');
 	Route::get('DepartmentList','DepartmentController@showlist')->name('admin.DepartmentList');
 	Route::get('addDepartment','DepartmentController@getadd')->name('admin.addDepartment');
 	Route::post('addDepartment','DepartmentController@postadd')->name('admin.addDepartment');
