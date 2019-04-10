@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Mail;
-
+use Session;
 class MailController extends Controller
 {
     public function getsendmail()
@@ -14,10 +14,17 @@ class MailController extends Controller
     public function postsendmail(Request $req)
     {
     	$data=['fullname'=>$req->user_recive,'title'=>$req->title,'content'=>$req->content];
-    	Mail::send('email',$data,function($msg){
+        //$files = $req->file('files');
+    	Mail::send('email',$data,function($msg) use ($data/*,$files*/){
     		$msg->from('tienphamnb123@gmail.com','Pham Tien');
-    		$msg->to('hienhien2511997@gmail.com','Hien Pham')->subject('Chạy thử email');
-    	});
-    	return redirect(route('home'));
+    		$msg->to($data['fullname']);
+            $msg->subject($data['title']);
+            /*$msg->attach($files->getRealPath(), [
+                'as' => $files->getClientOriginalName(), 
+                'mime' => $files->getMimeType()
+            ]);*/
+        });
+        //Session::flash('success','Email của bạn đã được gửi !');
+        return redirect(route('home'));
     }
 }
