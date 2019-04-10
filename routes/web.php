@@ -31,11 +31,11 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::get('deletePosition/{id}.html','PositionController@getdelete')->name('admin.deletePosition');
 	Route::get('UserList','UserController@showlist')->name('admin.UserList');
 	Route::get('addStaff','UserController@getadd')->name('admin.user.addstaff');
-	Route::get('ajaxdepartment/{iddepartment}','AjaxController@getdepartment')->name('admin.ajaxdepartment');
 	Route::post('addStaff','UserController@postadd')->name('admin.user.addstaff');
 	Route::get('editStaff/{id}.html','UserController@getedit')->name('admin.user.editStaff');
 	Route::post('editStaff/{id}.html','UserController@postedit')->name('admin.user.editStaff');
 	Route::get('deleteStaff/{id}.html','UserController@getdelete')->name('admin.user.deleteStaff');
+	Route::get('ajaxdepartment/{iddepartment}','AjaxController@getdepartment')->name('admin.ajaxdepartment');
 	Route::get('Profile/{id}.html','UserController@getprofile')->name('profile');
 	Route::post('Profile/{id}.html','UserController@postedit')->name('profile');
 	Route::get('checkin','CheckinController@getcheckin')->name('admin.checkin');
@@ -47,4 +47,6 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::get('delete-checkin/{id}.html','CheckinController@getdelete')->name('admin.deleteCheckin');
 	Route::get('send-email','MailController@getsendmail')->name('admin.sendmail');
 	Route::post('send-email','MailController@postsendmail')->name('admin.sendmail');
+	Route::get('addmember','UserController@getaddmember')->name('admin.addmember');
+	Route::post('addmember','UserController@postaddmember')->name('admin.addmember');
 });
