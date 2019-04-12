@@ -11,6 +11,8 @@ use App\Department;
 use Hash;
 use DB;
 use Mail;
+use App\Profile;
+use Carbon\Carbon;
 class UserController extends Controller
 {
     public function showlist()
@@ -167,26 +169,12 @@ class UserController extends Controller
     }
     public function postaddmember(Request $req)
     {
-        $this->validate($req,
-            [
-                'fullname'=>'required',
-                'email'=>'required|email'
-            ],
-            [
-                'fullname.required'=>'Bạn chưa điền tên !',
-                'email.required'=>'Bạn chưa điền email !',
-                'email.email'=>'Email không hợp lệ !'
-            ]
-        );
-        $pass=rand(100000,1000000);
-        $mem=new User;
-        $mem->id_department=$req->department;
-        $mem->fullname=$req->fullname;
-        $mem->email=$req->email;
-        $mem->password=Hash::make($pass);
-        $mem->role=$req->role;
-        $mem->save();
-        $data=['fullname'=>$req->fullname,'email'=>$req->email,'password'=>$pass];
+        $t= new Profile;
+        $token=$t->getToken();
+        $email=$req->email;
+        $created_at=Carbon::now('Asia/Ho_Chi_Minh');
+        DB::table('password_resets')->insert(['email'=>$email,'token'=>$token,'created_at'=>$created_at]);
+        $data=['email'=>$req->email,'token'=>$token];
         Mail::send('send_mail_add_member',$data, function($msg) use ($data){
             $msg->from('tienphamnb123@gmail.com','Pham Tien');
             $msg->to($data['email']);

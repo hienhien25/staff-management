@@ -12,36 +12,9 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<div class="input-group">
-						<span class="input-group-addon">Fullname:</span>
-						<input name="fullname" id="fullname" type="text" class="form-control" placeholder="Fullname*">
-					</div>
-					@if($errors->first('fullname'))
-					<span class="text-danger">{{$errors->first('fullname')}}</span>
-					@endif
-				</div>
-				<div class="form-group">
-					<div class="input-group">
 						<span class="input-group-addon">Email:</span>
 						<input name="email" id="email" type="text" class="form-control" placeholder="Email*">
 					</div>
-					@if($errors->first('email'))
-					<span class="text-danger">{{$errors->first('email')}}</span>
-					@endif
-				</div>
-				<div class="form-group">
-					<label >Department:</label>
-					<select name="department" class="form-control" >
-						@foreach($de as $d)
-						<option value="{{$d->id}}">{{$d->department_name}}</option>
-						@endforeach
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Role:</label>
-					<select class="form-control" id="role" name="role">
-						<option value="0">User</option>
-						<option value="1">Admin</option>
-					</select>
 				</div>
 			</div>
 			<div class="modal-footer clearfix">

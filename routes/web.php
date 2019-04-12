@@ -38,6 +38,8 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::get('ajaxdepartment/{iddepartment}','AjaxController@getdepartment')->name('admin.ajaxdepartment');
 	Route::get('Profile/{id}.html','UserController@getprofile')->name('profile');
 	Route::post('Profile/{id}.html','UserController@postedit')->name('profile');
+	Route::get('update-profile/{token}.html','ProfileController@getupdate')->name('admin.updateProfile');
+	Route::post('update-profile','ProfileController@postupdate')->name('admin.updateProfile');
 	Route::get('checkin','CheckinController@getcheckin')->name('admin.checkin');
 	Route::post('checkin','CheckinController@postcheckin')->name('admin.checkin');
 	Route::get('checkout','CheckinController@getcheckout')->name('admin.checkout');
@@ -49,4 +51,6 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::post('send-email','MailController@postsendmail')->name('admin.sendmail');
 	Route::get('addmember','UserController@getaddmember')->name('admin.addmember');
 	Route::post('addmember','UserController@postaddmember')->name('admin.addmember');
+	//reset password
+	Route::get('reset-password/{token}.html','PasswordController@reset')->name('admin.resetPassword');
 });
