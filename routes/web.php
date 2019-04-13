@@ -12,45 +12,53 @@
 */
 
 
-
-Route::get('adminlogin','PageController@getlogin')->name('adminlogin');
-Route::post('adminlogin','PageController@postlogin')->name('adminlogin');
+// Login and logout
+Route::get('admin-login','PageController@getLogin')->name('adminLogin');
+Route::post('admin-login','PageController@postLogin')->name('adminLogin');
 Route::get('logout','PageController@logout')->name('logout');
-Route::get('register','PageController@getregister')->name('register');
-Route::post('register','PageController@postregister')->name('register');
 Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
+	//Home
 	Route::get('/','PageController@index')->name('home');
-	Route::get('DepartmentList','DepartmentController@showlist')->name('admin.DepartmentList');
-	Route::get('addDepartment','DepartmentController@getadd')->name('admin.addDepartment');
-	Route::post('addDepartment','DepartmentController@postadd')->name('admin.addDepartment');
-	Route::get('deletedepartment/{id}.html','DepartmentController@getdelete')->name('admin.deletedepartment');
-	Route::get('PositionList/{id}.html','DepartmentController@showlistposition')->name('admin.PositionList');
-	Route::get('StaffList/{id}.html','PositionController@showstafflist')->name('admin.Position.StaffList');
-	Route::get('addPosition','PositionController@getadd')->name('admin.addPosition');
-	Route::post('addPosition','PositionController@postadd')->name('admin.addPosition');
-	Route::get('deletePosition/{id}.html','PositionController@getdelete')->name('admin.deletePosition');
-	Route::get('UserList','UserController@showlist')->name('admin.UserList');
-	Route::get('addStaff','UserController@getadd')->name('admin.user.addstaff');
-	Route::post('addStaff','UserController@postadd')->name('admin.user.addstaff');
-	Route::get('editStaff/{id}.html','UserController@getedit')->name('admin.user.editStaff');
-	Route::post('editStaff/{id}.html','UserController@postedit')->name('admin.user.editStaff');
-	Route::get('deleteStaff/{id}.html','UserController@getdelete')->name('admin.user.deleteStaff');
-	Route::get('ajaxdepartment/{iddepartment}','AjaxController@getdepartment')->name('admin.ajaxdepartment');
-	Route::get('Profile/{id}.html','UserController@getprofile')->name('profile');
-	Route::post('Profile/{id}.html','UserController@postedit')->name('profile');
+	//Department
+	Route::get('department-list','DepartmentController@showList')->name('admin.departmentList');
+	Route::get('add-department','DepartmentController@getAdd')->name('admin.addDepartment');
+	Route::post('add-department','DepartmentController@postAdd')->name('admin.addDepartment');
+	Route::get('delete-department/{id}.html','DepartmentController@getDelete')->name('admin.deleteDepartment');
+	//Position
+	Route::get('position-list/{id}.html','DepartmentController@showListPosition')->name('admin.positionList');
+	Route::get('staff-list/{id}.html','PositionController@showStaffList')->name('admin.position.staffList');
+	Route::get('add-position','PositionController@getAdd')->name('admin.addPosition');
+	Route::post('add-position','PositionController@postAdd')->name('admin.addPosition');
+	Route::get('delete-position/{id}.html','PositionController@getDelete')->name('admin.deletePosition');
+	//User 
+	Route::get('user-list','UserController@showList')->name('admin.userList');
+	Route::get('add-staff','UserController@getAdd')->name('admin.user.addStaff');
+	Route::post('add-staff','UserController@postAdd')->name('admin.user.addStaff');
+	Route::get('edit-staff/{id}.html','UserController@getEdit')->name('admin.user.editStaff');
+	Route::post('edit-staff/{id}.html','UserController@postEdit')->name('admin.user.editStaff');
+	Route::get('delete-staff/{id}.html','UserController@getDelete')->name('admin.user.deleteStaff');
+	//Ajax
+	Route::get('ajax-department/{iddepartment}','AjaxController@getDepartment')->name('admin.ajaxDepartment');
+	//Profile
+	Route::get('profile/{id}.html','UserController@getProfile')->name('profile');
+	Route::post('profile/{id}.html','UserController@postEdit')->name('profile');
 	Route::get('update-profile/{token}.html','ProfileController@getupdate')->name('admin.updateProfile');
-	Route::post('update-profile','ProfileController@postupdate')->name('admin.updateProfile');
-	Route::get('checkin','CheckinController@getcheckin')->name('admin.checkin');
-	Route::post('checkin','CheckinController@postcheckin')->name('admin.checkin');
-	Route::get('checkout','CheckinController@getcheckout')->name('admin.checkout');
-	Route::post('checkout','CheckinController@postcheckout')->name('admin.checkout');
-	Route::get('edit-checkout/{id}.html','CheckinController@geteditcheckout')->name('admin.editcheckout');
-	Route::post('edit-checkout/{id}.html','CheckinController@posteditcheckout')->name('admin.editcheckout');
-	Route::get('delete-checkin/{id}.html','CheckinController@getdelete')->name('admin.deleteCheckin');
-	Route::get('send-email','MailController@getsendmail')->name('admin.sendmail');
-	Route::post('send-email','MailController@postsendmail')->name('admin.sendmail');
-	Route::get('addmember','UserController@getaddmember')->name('admin.addmember');
-	Route::post('addmember','UserController@postaddmember')->name('admin.addmember');
+	Route::post('update-profile','ProfileController@postUpdate')->name('admin.updateProfile');
+	//Checkin
+	Route::get('checkin','CheckinController@getCheckin')->name('admin.checkin');
+	Route::post('checkin','CheckinController@postCheckin')->name('admin.checkin');
+	//Checkout
+	Route::get('checkout','CheckinController@getCheckout')->name('admin.checkout');
+	Route::post('checkout','CheckinController@postCheckout')->name('admin.checkout');
+	Route::get('edit-checkout/{id}.html','CheckinController@getEditCheckout')->name('admin.editCheckout');
+	Route::post('edit-checkout/{id}.html','CheckinController@postEditCheckout')->name('admin.editCheckout');
+	Route::get('delete-checkin/{id}.html','CheckinController@getDelete')->name('admin.deleteCheckin');
+	//Mail
+	Route::get('send-email','MailController@getSendMail')->name('admin.sendMail');
+	Route::post('send-email','MailController@postSendMail')->name('admin.sendMail');
+	// Regisster account by admin
+	Route::get('add-member','UserController@getAddMember')->name('admin.addMember');
+	Route::post('add-member','UserController@postAddMember')->name('admin.addMember');
 	//reset password
 	Route::get('reset-password/{token}.html','PasswordController@reset')->name('admin.resetPassword');
 });

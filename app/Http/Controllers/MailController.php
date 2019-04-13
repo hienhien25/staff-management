@@ -7,11 +7,11 @@ use Mail;
 use Session;
 class MailController extends Controller
 {
-    public function getsendmail()
+    public function getSendMail()
     {
-    	return view('layout.user.sendmail');
+    	return view('layout.user.send_mail');
     }
-    public function postsendmail(Request $req)
+    public function postSendMail(Request $req)
     {
     	$data=['fullname'=>$req->user_recive,'title'=>$req->title,'content'=>$req->content];
         //$files = $req->file('files');
