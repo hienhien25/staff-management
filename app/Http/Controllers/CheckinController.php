@@ -8,92 +8,103 @@ use App\Checkin;
 use Auth;
 use App\User;
 use DB;
+use App\Http\Requests\CheckinRequest;
 class CheckinController extends Controller
 {
-    public function getcheckin()
+    public function getCheckin()
     {
     	$dt = Carbon::now('Asia/Ho_Chi_Minh');
     	return view('layout.user.checkin',compact('dt'));
     }
-    public function postcheckin(Request $req)
+    public function postCheckin(CheckinRequest $req)
     {
     	$check= new Checkin;
+        $check->fill($req->all());
     	$check->id_staff=Auth::user()->id;
-    	$check->start_hour=$req->start_hour;
-    	$check->finish_hour=$req->finish_hour;	
     	$check->check_date=date('Y-m-d');
     	$check->save();
     	return redirect()->back();
     }
-    public function getcheckout()
+    public function getCheckout(Request $req)
     {
         $user=DB::table('tblcheckin')
         ->join('users','tblcheckin.id_staff','=','users.id')
         ->select('users.*','tblcheckin.*','tblcheckin.start_hour as start_hour','tblcheckin.finish_hour as finish_hour','tblcheckin.check_date as check_date','users.fullname as fullname')
         ->paginate(12);
-       /* switch ($month) {
+        $mon=$req->month;
+        //dd($mon);
+        switch ($mon) {
+            case 0:
+                return view('layout.user.checkout ',compact('user'));
+                break;
             case 1:
-             $month=Checkin::whereMonth('check_date', '=', date('1'))->get();
-             for($i=1;$i<=31;$i++)
-             {
-                $day=Checkin::whereDay('check_date','=',date('d'))->get();
-                echo "<button>".."</button>"
-
-             }
+            {
+             $mon=Checkin::whereMonth('check_date', '=', date('1'))->get();
+            //dd($mon)
+            return view('layout.user.checkout ',compact('mon','user'));
+            }
             break;
             case 2:
-            $month=Checkin::whereMonth('check_date', '=', date('2'))->get();
+            {
+             $mon=Checkin::whereMonth('check_date', '=', date('2'))->get();
+            
+            return view('layout.user.checkout ',compact('mon','user'));
             break;
+            }
             case 3:
-            $month=Checkin::whereMonth('check_date', '=', date('3'))->get();
+            {
+             $mon=Checkin::whereMonth('check_date', '=', date('3'))->get();    
+            return view('layout.user.checkout ',compact('mon','user'));
             break;
+            }
             case 4:
-            $month=Checkin::whereMonth('check_date', '=', date('4'))->get();
+            {
+             $mon=Checkin::whereMonth('check_date', '=', date('4'))->get();
+            
+            return view('layout.user.checkout ',compact('mon','user'));
             break;
+            }
             case 5:
-            $month=Checkin::whereMonth('check_date', '=', date('5'))->get();
+           {
+             $mon=Checkin::whereMonth('check_date', '=', date('5'))->get();
+            
+            return view('layout.user.checkout ',compact('mon','user'));
             break;
+            }
             case 6:
-            $month=Checkin::whereMonth('check_date', '=', date('6'))->get();
+           {
+             $mon=Checkin::whereMonth('check_date', '=', date('6'))->get();
+            
+            return view('layout.user.checkout ',compact('mon','user'));
             break;
+            }
             default:
             echo "Bạn điền sai tháng !";
-            break;
-        }*/
+            //break;
+        }
         //dd($user);
-        $month=Checkin::whereMonth('check_date', '=', date('m'))->get();
-        dd($month);
+        /*$mon=Checkin::whereMonth('check_date', '=', date('m'))->get();
+        dd($mon);
         $day=Checkin::whereDate('check_date','=',date('Y-m-d'))->get();
-        dd($day);
-        return view('layout.user.checkout',compact('user','month'));
+        dd($day);*/
+        //return view('layout.user.checkout',compact('user'));
     }
-    public function geteditcheckout($id)
+    public function getEditCheckout($id)
     {
         $chk=Checkin::find($id);
         //dd($chk);
-        return view('layout.user.editcheckout',compact('chk'));
+        return view('layout.user.edit_checkout',compact('chk'));
     }
-    public function posteditcheckout(Request $req,$id)
+    public function postEditCheckout(CheckinRequest $req,$id)
     {
-        $ch=Checkin::find('id');
-        $this->validate($req,
-            [
-                'start_hour'=>'required',
-                'finish_hour'=>'required'
-            ],
-            [
-                'start_hour.required'=>'Bạn chưa điền thời gian bắt đầu làm việc !',
-                'finish_hour.required'=>'Bạn chưa điền thời gian kết thúc !'
-            ]
-        );
-        $ch->start_hour=$req->start_hour;
-        $ch->finish_hour=$req->finish_hour;
+        $ch=Checkin::find($id);
+        $ch->fill($req->all());
         $ch->save();
         return redirect(route('admin.checkout'));
     }
-    public function getdelete($id)
+    public function getDelete($id)
     {
-        $chk=Checkin::find('id');
+        $chk=Checkin::find($id);
         //dd($chk);
         $chk->delete();
         return redirect()->back();
