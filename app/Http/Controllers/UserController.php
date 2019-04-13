@@ -13,14 +13,15 @@ use DB;
 use Mail;
 use App\Profile;
 use Carbon\Carbon;
+use App\Http\Requests\SaveStaffRequest;
 class UserController extends Controller
 {
-    public function showlist()
+    public function showList()
     {
     	$user=User::paginate(12);
     	return view('layout.user.list_user',compact('user'));
     }
-     public function getadd()
+     public function getAdd()
     {
         $de=Department::all();
         $pos=Position::all();
@@ -29,147 +30,70 @@ class UserController extends Controller
                     ->where('id_department',$id)
                     ->select('tbldepartment.*', 'tblposition.*', 'tbldepartment.department_name as department_name','tblposition.position_name as position_name','tblposition.description as description')
                     ->get();*/
-    	return view('layout.user.addstaff',compact('pos','de'));
+    	return view('layout.user.add_staff',compact('pos','de'));
     }
-    public function postadd(Request $req)
+    public function postAdd(SaveStaffRequest $req)
     {
-    	 $this->validate($req,
-             [
-                'fullname'=>'required|min:2|max:50',
-                'email'=>'required|email|min:8|max:255',
-                'password'=>'required|min:8|max:30',
-                'phone'=>'required|min:8|max:12',
-                'address'=>'required',
-                'larary'=>'required|number',
-                'dob'=>'required'
-            ],
-            [
-                'fullname.required'=>'Bạn chưa điền tên !',
-                'fullname.min'=>'Vui lòng nhập tên từ 2 kí tự trở lên!',
-                'fullname.max'=>'Tên dài không quá 50 kí tự!',
-                'email.required'=>'Bạn chưa điền email !',
-                'email.email'=>'Email của bạn không hợp lệ !',
-                'email.min'=>'Vui lòng nhập email từ 8 kí tự trở lên !',
-                'email.max'=>'Email dài không quá 255 kí tự',
-                'password.required'=>'Bạn chưa nhập mật khẩu',
-                'password.min'=>'Vui lòng nhập mật khẩu từ 8 kí tự trở lên !',
-                'password.max'=>'Mật khẩu dài không quá 30 kí tự!',
-                'phone.required'=>'Bạn chưa nhập SĐT !',
-                'phone.min'=>'Vui lòng nhập mật khẩu từ 8 kí tự trở lên !',
-                'phone.max'=>'Mật khẩu dài không quá 12 kí tự!',
-                'address.required'=>'Bạn chưa nhập địa chỉ !',
-                'larary.required'=>'Bạn chưa nhập lương !',
-                'larary.number'=>'Vui lòng điền số !',
-                'dob.required'=>'Bạn chưa điền ngày sinh !'
-
-            ]
-        );
-    	$st=new User;
+    	$st=new User();
+        $st->fill($req->all());
         $st->id_department=$req->department;
-        if($req->hasFile('image')){
-            $file=$req->file('image');
-            $name=$file->getClientOriginalName();
-            $image=str_random(9).$name;
-            $file->move('images',$image);
-            $st->image='images/'.$image;
+       if($req->hasFile('image')){
+            $filename = uniqid(). "." . $req->image->extension();
+            $path = $req->image->storeAs('images/', $filename);
+            $st->image = $path;
         }
-    	$st->fullname=$req->fullname;
-        $st->email=$req->email;
         $st->password=Hash::make($req->password);
-        $st->role=$req->role;
         $st->save();
-        $std=new Detail;
-        $std->dob=$req->dob;
-        $std->phone=$req->phone;
-        $std->address=$req->address;
-        $std->larary=$req->larary;
-        $std->gender=$req->gender;
+        $std=new Detail();
+        $std->id_staff=$st->id;
+        $std->fill($req->all());
         $std->save();
-        return redirect(route('admin.UserList'));
+        return redirect(route('admin.userList'));
     }
-    public function getedit($id)
+    public function getEdit($id)
     {
         $st=User::find('id');
         $de=Department::all();
         $std=Detail::where('id_staff',$id)->get();
-        return view('layout.user.editstaff',compact('st','de','std'));
+        return view('layout.user.edit_staff',compact('st','de','std'));
     }
-    public function postedit(Request $req,$id)
+    public function postEdit(SaveStaffRequest $req,$id)
     {
         $st=User::find('id');
-        $std=Detail::where('id_staff','=','id')->get();
-
-        $this->validate($req,
-            [
-                'fullname'=>'required|min:2|max:50',
-                'email'=>'required|unique:email|email|min:8|max:255',
-                'password'=>'required|min:8|max:30',
-                'phone'=>'required|min:8|max:12',
-                'address'=>'required',
-                'larary'=>'required|number',
-                'dob'=>'required'
-            ],
-            [
-                'fullname.required'=>'Bạn chưa điền tên !',
-                'fullname.min'=>'Vui lòng nhập tên từ 2 kí tự trở lên!',
-                'fullname.max'=>'Tên dài không quá 50 kí tự!',
-                'email.required'=>'Bạn chưa điền email !',
-                'email.unique'=>'Email này đã tồn tại !',
-                'email.email'=>'Email của bạn không hợp lệ !',
-                'email.min'=>'Vui lòng nhập email từ 8 kí tự trở lên !',
-                'email.max'=>'Email dài không quá 255 kí tự',
-                'password.required'=>'Bạn chưa nhập mật khẩu',
-                'password.min'=>'Vui lòng nhập mật khẩu từ 8 kí tự trở lên !',
-                'password.max'=>'Mật khẩu dài không quá 30 kí tự!',
-                'phone.required'=>'Bạn chưa nhập SĐT !',
-                'phone.min'=>'Vui lòng nhập mật khẩu từ 8 kí tự trở lên !',
-                'phone.max'=>'Mật khẩu dài không quá 12 kí tự!',
-                'address.required'=>'Bạn chưa nhập địa chỉ !',
-                'larary.required'=>'Bạn chưa nhập lương !',
-                'larary.number'=>'Vui lòng điền số !',
-                'dob.required'=>'Bạn chưa điền ngày sinh !'
-
-            ]
-        );
+        $st->fill($req->all());
         if($req->hasFile('image')){
-            $file=$req->file('image');
-            $name=$file->getClientOriginalName();
-            $image=str_random(9).$name;
-            $file->move('images',$image);
-            $st->image='images/'.$image;
+            $filename = uniqid(). "." . $req->image->extension();
+            $path = $req->image->storeAs('images/', $filename);
+            $st->image = $path;
         }
-        $st->fullname=$req->name;
-        $st->email=$req->email;
         $st->password=Hash::make($req->password);
-        $st->role=$req->role;
         $st->save();
-        $std->dob=$req->dob;
-        $std->phone=$req->phone;
-        $std->address=$req->address;
-        $std->larary=$req->larary;
+        $std=Detail::where('id_staff','=','id')->get();
+        $std->fill($req->all());
+        $std->id_staff=$id;
         $std->save();
-        return redirect(route('admin.UserList'))->with('msg','Bạn đã thêm thành công !');
+        return redirect(route('admin.userList'))->with('msg','Bạn đã thêm thành công !');
     }
-    public function getprofile($id)
+    public function getProfile($id)
     {
         $pr=User::find('id');
         $pro=Detail::where('id_staff','=','id')->get();
         return view('layout.user.profile',compact('pr','pro'));
     }
-    public function getdelete($id)
+    public function getDelete($id)
     {
         $ds=User::find('id');
         $ds->delete();
-        return redirect(route('admin.UserList'));
+        return redirect(route('admin.userList'));
     }
-    public function getaddmember()
+    public function getAddMember()
     {
         $de=Department::all();
-        return view('layout.addmember',compact('de'));
+        return view('layout.add_member',compact('de'));
     }
-    public function postaddmember(Request $req)
+    public function postAddMember(Request $req)
     {
-        $t= new Profile;
+        $t= new Profile();
         $token=$t->getToken();
         $email=$req->email;
         $created_at=Carbon::now('Asia/Ho_Chi_Minh');
