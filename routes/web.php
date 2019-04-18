@@ -16,6 +16,14 @@
 Route::get('admin-login','PageController@getLogin')->name('adminLogin');
 Route::post('admin-login','PageController@postLogin')->name('adminLogin');
 Route::get('logout','PageController@logout')->name('logout');
+Route::get('update-profile/{token}.html','ProfileController@getUpdate')->name('admin.updateProfile');
+Route::post('update-profile','ProfileController@postUpdate')->name('admin.updateProfile');
+Route::group(['prefix'=>'password'],function(){
+	Route::post('create-password','PasswordController@create')->name('password.createPassword');
+	Route::get('reset-password/{token}.html','PasswordController@getReset')->name('password.resetPassword');
+	Route::post('reset-password','PasswordController@postResset')->name('password.resetPassword');
+});
+Route::get('forgot-password','PasswordController@getForgot')->name('forgotPassword');
 Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	//Home
 	Route::get('/','PageController@index')->name('home');
@@ -24,6 +32,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::get('add-department','DepartmentController@getAdd')->name('admin.addDepartment');
 	Route::post('add-department','DepartmentController@postAdd')->name('admin.addDepartment');
 	Route::get('delete-department/{id}.html','DepartmentController@getDelete')->name('admin.deleteDepartment');
+	Route::get('export-department-list-to-excel','DepartmentController@export')->name('exportDepartment');
 	//Position
 	Route::get('position-list/{id}.html','DepartmentController@showListPosition')->name('admin.positionList');
 	Route::get('staff-list/{id}.html','PositionController@showStaffList')->name('admin.position.staffList');
@@ -42,14 +51,13 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	//Profile
 	Route::get('profile/{id}.html','UserController@getProfile')->name('profile');
 	Route::post('profile/{id}.html','UserController@postEdit')->name('profile');
-	Route::get('update-profile/{token}.html','ProfileController@getupdate')->name('admin.updateProfile');
-	Route::post('update-profile','ProfileController@postUpdate')->name('admin.updateProfile');
 	//Checkin
 	Route::get('checkin','CheckinController@getCheckin')->name('admin.checkin');
 	Route::post('checkin','CheckinController@postCheckin')->name('admin.checkin');
+	Route::get('show-checkin-list','CheckinController@showList')->name('admin.showCheckinList');
+	Route::post('show-checkin-list','CheckinController@postShow')->name('admin.showCheckinList');
 	//Checkout
-	Route::get('checkout','CheckinController@getCheckout')->name('admin.checkout');
-	Route::post('checkout','CheckinController@postCheckout')->name('admin.checkout');
+	Route::get('checkout','CheckoutController@getCheckout')->name('admin.checkout');
 	Route::get('edit-checkout/{id}.html','CheckinController@getEditCheckout')->name('admin.editCheckout');
 	Route::post('edit-checkout/{id}.html','CheckinController@postEditCheckout')->name('admin.editCheckout');
 	Route::get('delete-checkin/{id}.html','CheckinController@getDelete')->name('admin.deleteCheckin');
@@ -59,6 +67,6 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	// Regisster account by admin
 	Route::get('add-member','UserController@getAddMember')->name('admin.addMember');
 	Route::post('add-member','UserController@postAddMember')->name('admin.addMember');
-	//reset password
-	Route::get('reset-password/{token}.html','PasswordController@reset')->name('admin.resetPassword');
+	//Log 
+	Route::get('log','LogController@getLog')->name('admin.log');
 });
