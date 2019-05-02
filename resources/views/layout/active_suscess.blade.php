@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-	<title>Email Authenication </title>
+	<title> </title>
 	<base href="{{asset('/')}}">
 	@include('css')
 </head>
@@ -10,25 +10,22 @@
 	-webkit-transform: translateX(-50%) translateY(-50%);">
 	<div class="be-content">
 		<div class="main-content container-fluid">
-			<form  method="post" action="{{route('confirmEmail')}}"  role="form">
-				@csrf
+			<form  method="" action="" data-toggle="validator" role="form">
 				<div class="splash-container">
 					<div class="panel panel-default panel-border-color panel-border-color-primary">
 						<div class="panel-heading panel-heading-divider">
-							<span class="splash-description"><h4 style="font-weight:bold;">Staff Management</h4><h5 style="font-weight:bold;">Email Authenication</h5></span>
+							<span class="splash-description"><h4 style="font-weight:bold;">Staff Management</h4></span>
 
 						</div>
 						<div class="panel-body">
 
 							<div class="form-group">
-								<input name="email" type="email" id="email" class="form-control" placeholder="Enter email*">
-							</div>
-							 <button type="submit" class="btn bg-olive btn-block">OK</button>              
+								<span class="splash-description">Vui lòng kiểm tra email để hoàn tất !</span>
+							</div>          
 						</div>
 					</div>
 
-				</div>
-			</form>
+				</div></form>
 
 				<script type="text/javascript">
 					$('body').addClass('be-splash-screen');
