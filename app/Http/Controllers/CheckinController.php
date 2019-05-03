@@ -8,7 +8,10 @@ use App\Checkin;
 use Auth;
 use App\User;
 use DB;
+use App\Statistics;
 use App\Http\Requests\CheckinRequest;
+use App\Time;
+use Session;
 class CheckinController extends Controller
 {
     public function getCheckin()
@@ -18,76 +21,50 @@ class CheckinController extends Controller
     }
     public function postCheckin(CheckinRequest $req)
     {
+        $checkin=Session::get('checkin');
+        $m=Carbon::now()->month;
+        $time=Time::where('month',$m)->first();
+        // Kiểm tra xem trong bảng thống kê đã có record lưu thống kê của user trong thangs hiện tại chưa 
+        $check=Statistics::where('id_staff',Auth::user()->id)
+                            ->where('id_month',$time->id)
+                            ->get();
+        //dd($check);
+        if(!empty($check))// Nếu ko có 
+        {
+            //Lưu thêm trường này vào tblstatistic
+            $sta= new Statistics();
+            $sta->id_month=$time->id;
+            $sta->id_staff =Auth::user()->id;
+            if(!$sta->save())
+            {
+                throw new Exception("System Error ", 1);     
+            }
+        }
+        $month=Statistics::where('id_month',$time->id)
+                        ->where('id_staff',Auth::user()->id)
+                        ->first();
+       //dd($month);  
     	$check= new Checkin;
         $check->fill($req->all());
-    	$check->id_staff=Auth::user()->id;
+        $check->id_statist=$month->id;
     	$check->check_date=date('Y-m-d');
-    	$check->save();
+    	if(!$check->save())
+        {
+            throw new Exception("Error ", 1);  
+        }
+        Session::forget('checkin');
     	return redirect()->back();
     }
-    public function getCheckout(Request $req)
+    public function showList(Request $req)
     {
         $user=DB::table('tblcheckin')
-        ->join('users','tblcheckin.id_staff','=','users.id')
-        ->select('users.*','tblcheckin.*','tblcheckin.start_hour as start_hour','tblcheckin.finish_hour as finish_hour','tblcheckin.check_date as check_date','users.fullname as fullname')
-        ->paginate(12);
-        $mon=$req->month;
+        ->join('tblstatistic','tblcheckin.id_statist','=','tblstatistic.id')
+        ->leftjoin('users','tblstatistic.id_staff','=','users.id')
+        ->select('users.*','tblcheckin.*','tblstatistic.*','tblcheckin.start_hour as start_hour','tblcheckin.finish_hour as finish_hour','tblcheckin.check_date as check_date','users.fullname as fullname')
+        ->paginate(12);   
+        $mon=\App\Time::all();  
         //dd($mon);
-        switch ($mon) {
-            case 0:
-                return view('layout.user.checkout ',compact('user'));
-                break;
-            case 1:
-            {
-             $mon=Checkin::whereMonth('check_date', '=', date('1'))->get();
-            //dd($mon)
-            return view('layout.user.checkout ',compact('mon','user'));
-            }
-            break;
-            case 2:
-            {
-             $mon=Checkin::whereMonth('check_date', '=', date('2'))->get();
-            
-            return view('layout.user.checkout ',compact('mon','user'));
-            break;
-            }
-            case 3:
-            {
-             $mon=Checkin::whereMonth('check_date', '=', date('3'))->get();    
-            return view('layout.user.checkout ',compact('mon','user'));
-            break;
-            }
-            case 4:
-            {
-             $mon=Checkin::whereMonth('check_date', '=', date('4'))->get();
-            
-            return view('layout.user.checkout ',compact('mon','user'));
-            break;
-            }
-            case 5:
-           {
-             $mon=Checkin::whereMonth('check_date', '=', date('5'))->get();
-            
-            return view('layout.user.checkout ',compact('mon','user'));
-            break;
-            }
-            case 6:
-           {
-             $mon=Checkin::whereMonth('check_date', '=', date('6'))->get();
-            
-            return view('layout.user.checkout ',compact('mon','user'));
-            break;
-            }
-            default:
-            echo "Bạn điền sai tháng !";
-            //break;
-        }
-        //dd($user);
-        /*$mon=Checkin::whereMonth('check_date', '=', date('m'))->get();
-        dd($mon);
-        $day=Checkin::whereDate('check_date','=',date('Y-m-d'))->get();
-        dd($day);*/
-        //return view('layout.user.checkout',compact('user'));
+        return view('layout.user.show_checkin_list ',compact('user','mon'));
     }
     public function getEditCheckout($id)
     {
@@ -99,14 +76,20 @@ class CheckinController extends Controller
     {
         $ch=Checkin::find($id);
         $ch->fill($req->all());
-        $ch->save();
+        if(!$ch->save())
+        {
+            throw new Exception("System Error", 1);  
+        }
         return redirect(route('admin.checkout'));
     }
     public function getDelete($id)
     {
         $chk=Checkin::find($id);
         //dd($chk);
-        $chk->delete();
+        if(!$chk->delete())
+        {
+            throw new Exception("System Error", 1);
+        }
         return redirect()->back();
     }
 }

@@ -122,7 +122,8 @@ public function postConfirm(Request $req)
     $active->token=$token;
     if(!$active->save())
     {
-        return response()->json(['message'=>'Error !']);
+        throw new Exception("System Error", 1);
+        
     }
     return redirect(route('activeSuscess'));
 }
@@ -142,8 +143,16 @@ public function verification(Request $req,$token)
    $user=User::where('id',$active->user_id)->first();
    //dd($user);
    $user->active=1;
-   $user->save();
-   $active->delete();
+   DB::beginTransaction();
+   try {
+      $user->save();
+      $active->delete(); 
+      DB::commit();
+   } catch (Exception $e) {
+        DB::rollBack();
+       throw new Exception("Lỗi tài khoản chưa được kích hoạt !", 1);
+   }
+   
    return redirect(route('home'));
 }
 }

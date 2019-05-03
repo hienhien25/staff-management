@@ -6,70 +6,83 @@ use Illuminate\Http\Request;
 use App\Position;
 use App\Department;
 use Auth;
+use App\Http\Requests\SaveStaffRequest;
+use App\User;
+use App\PasswordResset;
+use Carbon\Carbon;
+use Hash;
+use App\Detail;
+use App\Profile;
+use Mail;
+use App\UserActive;
 class ProfileController extends Controller
 {
-    public function getupdate($token)
+    public function getUpdate($token)
     {
-        $tk=$token;
-        //dd($token);
-    	$de=Department::all();
-    	$pos=Position::all();
-    	return view('layout.update_profile',compact('de','pos','tk'));
+        $pr=PasswordResset::where('token',$token)->first();
+        //dd($pr);
+        if(!$pr){
+            throw new Exception("Hết hạn đăng kí ", 1);
+            
+        }
+        if(Carbon::parse($pr->created_at)->addMinutes(120)->isPast()){
+            $pr->delete();
+            throw new Exception("Hết hạn đăng kí ", 1);
+        }
+        $de=Department::all();
+        $pos=Position::all();
+        return view('layout.update_profile',compact('de','pos'));
     }
-    public function postupdate(Request $req)
+    public function postUpdate(SaveStaffRequest $req)
     {
-    	$idlog=Auth::user()->id;
-    	$st=User::find($idlog);
-        $this->validate($req,
-            [
-                'fullname'=>'required|min:2|max:50',
-                'email'=>'required|email|min:8|max:255',
-                'password'=>'required|min:8|max:30',
-                'phone'=>'required|min:8|max:12',
-                'address'=>'required',
-                'larary'=>'required|number',
-                'dob'=>'required'
-            ],
-            [
-                'fullname.required'=>'Bạn chưa điền tên !',
-                'fullname.min'=>'Vui lòng nhập tên từ 2 kí tự trở lên!',
-                'fullname.max'=>'Tên dài không quá 50 kí tự!',
-                'email.required'=>'Bạn chưa điền email !',
-                'email.email'=>'Email của bạn không hợp lệ !',
-                'email.min'=>'Vui lòng nhập email từ 8 kí tự trở lên !',
-                'email.max'=>'Email dài không quá 255 kí tự',
-                'password.required'=>'Bạn chưa nhập mật khẩu',
-                'password.min'=>'Vui lòng nhập mật khẩu từ 8 kí tự trở lên !',
-                'password.max'=>'Mật khẩu dài không quá 30 kí tự!',
-                'phone.required'=>'Bạn chưa nhập SĐT !',
-                'phone.min'=>'Vui lòng nhập mật khẩu từ 8 kí tự trở lên !',
-                'phone.max'=>'Mật khẩu dài không quá 12 kí tự!',
-                'address.required'=>'Bạn chưa nhập địa chỉ !',
-                'larary.required'=>'Bạn chưa nhập lương !',
-                'larary.number'=>'Vui lòng điền số !',
-                'dob.required'=>'Bạn chưa điền ngày sinh !'
-
-            ]
-        );
+        $st=new User();
+        $st->fill($req->all());
+        $st->id_department=$req->department;
         if($req->hasFile('image')){
             $file=$req->file('image');
             $name=$file->getClientOriginalName();
-            $image=str_random(9).$name;
+            $image=str_random(15).$name;
             $file->move('images',$image);
             $st->image='images/'.$image;
         }
-        $st->fullname=$req->name;
-        $st->id_department=$req->department;
-        $st->email=$req->email;
         $st->password=Hash::make($req->password);
         $st->role=$req->role;
         $st->save();
-        $std=new Detail;
-        $std->dob=$req->dob;
-        $std->phone=$req->phone;
-        $std->address=$req->address;
-        $std->larary=$req->larary;
+        $std=new Detail();
+        $std->fill($req->all());
+        $std->id_staff=$st->id;
         $std->save();
-        return redirect(route('home'))->with('msg','Bạn đã thêm thành công !');
-    }
+        $code=rand(100000,10000000000);
+        $tk=new PasswordResset();
+        $token=$tk->getToken();
+        $data=['email'=>$req->email,'token'=>$token];
+        try {
+            Mail::send('confirm_email_of_user',$data, function($msg) use ($data){
+                $msg->from('tienphamnb123@gmail.com','Pham Tien');
+                $msg->to($data['email']);
+                $msg->subject('Email Authentication');
+            });
+        } catch (Exception $e) {
+            throw new Exception("System Error", 1);
+            
+        }
+        DB::beginTransaction();
+        try {
+           $user=User::where('email',$req->email)->first();
+           $active= new UserActive();
+           $active->user_id=$user->id;
+           $active->activation_code=$code;
+           $active->token=$token;
+           $active->save();
+           $pr=PasswordResset::where('email',$req->email)->first();
+           $pr->delete();
+           DB::commit();
+       } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception("System Error", 1);
+            
+       }
+       
+       return redirect(route('adminLogin'))->with('message','Vui lòng kiểm tra lại email để hoàn tất việc đăng kí!');
+   }
 }
