@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Auth::routes(['verify' => true]);
 
 // Login and logout
 Route::get('admin-login','PageController@getLogin')->name('adminLogin');
@@ -24,6 +24,14 @@ Route::group(['prefix'=>'password'],function(){
 	Route::post('reset-password','PasswordController@postResset')->name('password.resetPassword');
 });
 Route::get('forgot-password','PasswordController@getForgot')->name('forgotPassword');
+//Account authentication
+//Route::get('confirm-email/{token}.html','PasswordController@getConfirm')->name('confirmEmail');
+Route::post('confirm-email','PasswordController@postConfirm')->name('confirmEmail');
+Route::get('active','PasswordController@getActive')->name('active');
+Route::get('send-mail-to-active','PasswordController@getMailToActive')->name('sendMailToActive');
+Route::get('verification/{token}.html','PasswordController@verification')->name('verification');
+Route::get('active-suscess','PasswordController@getSuscess')->name('activeSuscess');
+Route::get('expiration','PasswordController@getExpire')->name('expiration');
 Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	//Home
 	Route::get('/','PageController@index')->name('home');
@@ -31,21 +39,23 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::get('department-list','DepartmentController@showList')->name('admin.departmentList');
 	Route::get('add-department','DepartmentController@getAdd')->name('admin.addDepartment');
 	Route::post('add-department','DepartmentController@postAdd')->name('admin.addDepartment');
-	Route::get('delete-department/{id}.html','DepartmentController@getDelete')->name('admin.deleteDepartment');
+	Route::post('delete-department/{id}.html','DepartmentController@getDelete')->name('admin.deleteDepartment');
+	Route::post('edit-department/{id}.html','DepartmentController@postEdit')->name('admin.editDepartment');
 	Route::get('export-department-list-to-excel','DepartmentController@export')->name('exportDepartment');
 	//Position
 	Route::get('position-list/{id}.html','DepartmentController@showListPosition')->name('admin.positionList');
 	Route::get('staff-list/{id}.html','PositionController@showStaffList')->name('admin.position.staffList');
 	Route::get('add-position','PositionController@getAdd')->name('admin.addPosition');
 	Route::post('add-position','PositionController@postAdd')->name('admin.addPosition');
-	Route::get('delete-position/{id}.html','PositionController@getDelete')->name('admin.deletePosition');
+	Route::post('edit-position/{id}.html','PositionController@postEdit')->name('admin.editPosition');
+	Route::post('delete-position/{id}.html','PositionController@postDelete')->name('admin.deletePosition');
 	//User 
 	Route::get('user-list','UserController@showList')->name('admin.userList');
 	Route::get('add-staff','UserController@getAdd')->name('admin.user.addStaff');
 	Route::post('add-staff','UserController@postAdd')->name('admin.user.addStaff');
 	Route::get('edit-staff/{id}.html','UserController@getEdit')->name('admin.user.editStaff');
 	Route::post('edit-staff/{id}.html','UserController@postEdit')->name('admin.user.editStaff');
-	Route::get('delete-staff/{id}.html','UserController@getDelete')->name('admin.user.deleteStaff');
+	Route::post('delete-staff/{id}','UserController@getDelete')->name('admin.user.deleteStaff');
 	//Ajax
 	Route::get('ajax-department/{iddepartment}','AjaxController@getDepartment')->name('admin.ajaxDepartment');
 	//Profile
@@ -58,15 +68,25 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::post('show-checkin-list','CheckinController@postShow')->name('admin.showCheckinList');
 	//Checkout
 	Route::get('checkout','CheckoutController@getCheckout')->name('admin.checkout');
+	Route::post('post-checkout','CheckoutController@postCheckout')->name('admin.postcheckout');
 	Route::get('edit-checkout/{id}.html','CheckinController@getEditCheckout')->name('admin.editCheckout');
 	Route::post('edit-checkout/{id}.html','CheckinController@postEditCheckout')->name('admin.editCheckout');
-	Route::get('delete-checkin/{id}.html','CheckinController@getDelete')->name('admin.deleteCheckin');
+	Route::post('delete-checkin/{id}.html','CheckinController@getDelete')->name('admin.deleteCheckin');
 	//Mail
 	Route::get('send-email','MailController@getSendMail')->name('admin.sendMail');
 	Route::post('send-email','MailController@postSendMail')->name('admin.sendMail');
-	// Regisster account by admin
+	Route::get('mailbox','MailController@getMailbox')->name('admin.mailbox');
+	//Regisster account by admin
 	Route::get('add-member','UserController@getAddMember')->name('admin.addMember');
 	Route::post('add-member','UserController@postAddMember')->name('admin.addMember');
 	//Log 
 	Route::get('log','LogController@getLog')->name('admin.log');
+	//Route::get('add-item/{id}','LogController@addItem')->name('admin.addItem');
+	Route::delete('destroy-log/{id}','LogController@destroy')->name('admin.destroyLog');
+	Route::post('delete-many-time-log','LogController@DeleteMany')->name('admin.deleteMany');
+	//Statistics total working hours
+	Route::get('show-checkout-list-per-month','StatisticController@getShowListPerMonth')->name('CheckoutListPerMonth');
+	Route::get('search-checkout-per-day','StatisticController@getSearch')->name('admin.search');
+	Route::get('statistic-list-personal','StatisticController@getPersonal')->name('admin.statisticPersonal');
+	Route::get('export-statistic-per-month','StatisticController@getExport')->name('admin.exportDataStatistic');
 });
