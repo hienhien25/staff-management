@@ -15,6 +15,8 @@ use App\Detail;
 use App\Profile;
 use Mail;
 use App\UserActive;
+use DB;
+use Exception;
 class ProfileController extends Controller
 {
     public function getUpdate($token)
@@ -22,12 +24,12 @@ class ProfileController extends Controller
         $pr=PasswordResset::where('token',$token)->first();
         //dd($pr);
         if(!$pr){
-            throw new Exception("Hết hạn đăng kí ", 1);
+            return redirect(route('expiration'));
             
         }
         if(Carbon::parse($pr->created_at)->addMinutes(120)->isPast()){
             $pr->delete();
-            throw new Exception("Hết hạn đăng kí ", 1);
+            return redirect(route('expiration'));
         }
         $de=Department::all();
         $pos=Position::all();
@@ -83,6 +85,6 @@ class ProfileController extends Controller
             
        }
        
-       return redirect(route('adminLogin'))->with('message','Vui lòng kiểm tra lại email để hoàn tất việc đăng kí!');
+       return redirect(route('activeSuscess'))->with('message','Vui lòng kiểm tra lại email để hoàn tất việc đăng kí!');
    }
 }

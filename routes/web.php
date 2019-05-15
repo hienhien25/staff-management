@@ -63,7 +63,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::post('profile/{id}.html','UserController@postEdit')->name('profile');
 	//Checkin
 	Route::get('checkin','CheckinController@getCheckin')->name('admin.checkin');
-	Route::post('checkin','CheckinController@postCheckin')->name('admin.checkin');
+	Route::post('post-checkin','CheckinController@postCheckin')->name('admin.checkin');
 	Route::get('show-checkin-list','CheckinController@showList')->name('admin.showCheckinList');
 	Route::post('show-checkin-list','CheckinController@postShow')->name('admin.showCheckinList');
 	//Checkout
@@ -81,9 +81,11 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']],function(){
 	Route::post('add-member','UserController@postAddMember')->name('admin.addMember');
 	//Log 
 	Route::get('log','LogController@getLog')->name('admin.log');
+	Route::get('time-log','LogController@getTimeLog')->name('admin.timeLog');
 	//Route::get('add-item/{id}','LogController@addItem')->name('admin.addItem');
 	Route::delete('destroy-log/{id}','LogController@destroy')->name('admin.destroyLog');
 	Route::post('delete-many-time-log','LogController@DeleteMany')->name('admin.deleteMany');
+	Route::post('delete-time-log','LogController@deleteTimeLog')->name('admin.deleteTimeLog');
 	//Statistics total working hours
 	Route::get('show-checkout-list-per-month','StatisticController@getShowListPerMonth')->name('CheckoutListPerMonth');
 	Route::get('search-checkout-per-day','StatisticController@getSearch')->name('admin.search');

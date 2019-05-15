@@ -10,8 +10,12 @@ use App\Observers\UserObserver;
 use App\Observers\DepartmentObserver;
 use App\Checkin;
 use App\Observers\CheckinObserver;
-use App\Chekout;
+use App\Checkout;
 use App\Observers\CheckoutObserver;
+use Session;
+use App\Time;
+use App\Statistics;
+use Auth;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -35,6 +39,10 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Department::observe(DepartmentObserver::class);
         Checkin::observe(CheckinObserver::class);
-       /* Checkout::observe(CheckoutObserver::class);*/
+        Checkout::observe(CheckoutObserver::class);
+        /*view()->composer(['layout.sidebar'],function($view){
+           $checkin = session()->has('checkin') == true ? session('checkin') : [];
+            $view->with('checkin',$checkin);
+       });*/
     }
 }

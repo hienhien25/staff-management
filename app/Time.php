@@ -14,7 +14,9 @@ class Time extends Model
 	public function increasingMonth()
 	{
 		$month=Carbon::now()->month;
-		$m=Time::where('month',$month+1)->first();
+		$nextmon=Carbon::now()->addMonth()->month;
+		//dd($nextmon);
+		$m=Time::where('month',$nextmon)->first();
 		//dd(isset($m));
 		if(!isset($m)){
 			$d=Carbon::now()->daysInMonth;
@@ -29,67 +31,5 @@ class Time extends Model
 			}
 		}
 		
-		/*$day=Carbon::now()->day;
-		$month=Carbon::now()->month;
-		$year=Carbon::now()->year;
-		switch($month){
-			case 1:
-			case 3:
-			case 5:
-			case 7:
-			case 8:
-			case 10:
-			case 12:
-			{
-				if($day==31)
-				{
-					addMonth();
-				}
-				break;
-			}
-			case 2:
-			{
-				//Kiểm tra năm nhuận 
-				if($year %100==0){
-					if($year %400){
-						//Nếu năm hiện tại là năm nhuận 
-						if($day==29)//Ngày hiện tại =29 thì save thêm tháng tới vào DB
-						{
-							addMonth();
-						}
-					}else{//Không phải năm nhuận 
-						if($day==28)//Ngày hiện tại =28 thì save thêm tháng tới vào DB
-						{
-							addMonth();
-						}
-					}
-				}else if($year %4==0){
-					if($day==29)
-					{
-						addMonth();
-					}
-				}else{
-					if($day==28)
-					{
-						addMonth();
-					}
-				}
-				
-				break;
-			}
-			case 4:
-			case 6:
-			case 9:
-			case 11:
-			{
-				if($day==22)
-				{
-					addMonth();
-				}
-				break;
-			}
-			default:
-			break;
-		}*/
 	}
 }

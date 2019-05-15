@@ -21,7 +21,6 @@ class CheckinController extends Controller
     }
     public function postCheckin(CheckinRequest $req)
     {
-        $checkin=Session::get('checkin');
         $m=Carbon::now()->month;
         $time=Time::where('month',$m)->first();
         // Kiểm tra xem trong bảng thống kê đã có record lưu thống kê của user trong thangs hiện tại chưa 
@@ -52,8 +51,8 @@ class CheckinController extends Controller
         {
             throw new Exception("Error ", 1);  
         }
-        Session::forget('checkin');
-    	return redirect()->back();
+
+    	return response()->json(['success'=>'Successfully!']);
     }
     public function showList(Request $req)
     {

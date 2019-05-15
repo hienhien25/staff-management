@@ -24,15 +24,13 @@ class CheckinRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_hour'=>'required',
-            'finish_hour'=>'required'
+            'start_hour'=>'required'
         ];
     }
     public function messages()
     {
         return [
-            'start_hour.required'=>'Bạn chưa điền thời gian bắt đầu làm việc !',
-            'finish_hour.required'=>'Bạn chưa điền thời gian kết thúc !'
+            'start_hour.required'=>'Bạn chưa điền thời gian bắt đầu làm việc !'
         ];
     }
 }

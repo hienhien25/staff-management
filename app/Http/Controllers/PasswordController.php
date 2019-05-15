@@ -12,6 +12,7 @@ use App\PasswordResset;
 use Hash;
 use App\UserActive;
 use Auth;
+use DB;
 class PasswordController extends Controller
 {
     public function getForgot()
@@ -39,23 +40,18 @@ class PasswordController extends Controller
         if ($user && $pr){
          $user->notify(new PasswordResetRequest($pr->token));
      }
-     return response()->json(['message'=>'Chung toi da gui email cho ban de khoi phuc tai khoan . Vui long kiem tra lai email !']);
+     return redirect(route('activeSuscess'));
  }
  public function getReset($token)
  {
     $pr=PasswordResset::where('token',$token)->first();
     //dd($pr);
     if(!$pr){
-        return response()->json([
-            'message'=>'Token da het han thuc hien !'
-        ]);
+        return redirect(route('expiration'));
     }
     if(Carbon::parse($pr->update_at)->addMinutes(120)->isPast()){
         $pr->delete();
-        return response()->json([
-            'message'=>'Token da het han thuc hien  !'
-        ]);
-
+        return redirect(route('expiration'));
     }
     return view('auth.passwords.reset',compact('pr'));
 }
@@ -89,12 +85,12 @@ public function getConfirm($token)
     $check=UserActive::where('token',$token)->first();
     if(!isset($check))
     {
-        return response()->json(['message'=>'Hết hạn thực hiện !']);
+        return redirect(route('expiration'));
     }
     if(Carbon::parse($check->update_at)->addMinutes(120)->isPast())
     {
         $check->delete();
-        return response()->json(['message'=>'Hết hạn thực hiện !']);
+       return redirect(route('expiration'));
     }
     return view('layout.confirm_email');
 }
@@ -154,5 +150,9 @@ public function verification(Request $req,$token)
    }
    
    return redirect(route('home'));
+}
+public function getExpire()
+{
+    return view('expiration');
 }
 }

@@ -15,9 +15,9 @@ class CreateTblcheckinTable extends Migration
     {
         Schema::create('tblcheckin', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_staff');
+            $table->unsignedInteger('id_statist');
             $table->time('start_hour')->default('8:30');
-            $table->time('finish_hour')->default('5:30');
+            $table->time('finish_hour')->unable();
             $table->date('check_date');
             $table->timestamps();
         });

@@ -1,83 +1,67 @@
 @extends('master')
 @section('title','Checkout')
 @section('content')
-<div class="box">
-	<div class="box-header">
-		<h3 class="box-title">Checkout Data</h3>                                    
-	</div><!-- /.box-header -->
-	<div class="box-body table-responsive">
-		<div id="example1_wrapper" class="dataTables_wrapper form-inline" role="grid">
-			<div class="row">
-				<div class="col-xs-6">
-					<div id="example1_length" class="dataTables_length">
-						<label>
-							Tháng : 
-							<select size="1" name="month" aria-controls="example1">
-								<option value="1" >1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="9">10</option>
-								<option value="9">11</option>
-								<option value="9">12</option>
-							</select>
-							</label>
+<div class="modal-dialog" >
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="window.history.back();">×</button>
+			<h4 class="modal-title" style="color: blue;text-align: center;"><i class="fa fa-fw fa-check-square-o"></i>Checkout  </h4>
+		</div>
+		<form action="{{route('admin.checkout')}}" method="post">
+			@csrf
+			<div class="modal-body">
+				<table>
+					<tr>
+						<td>
+							<div class="form-group">
+								<div class="input-group">
+									<span class="input-group-addon"> Start:</span>
+									<input type="time" class="form-control" id="start_hour" name="start_hour" value="{{$check->start_hour}}">
+								</div>
+								@if($errors->first('start_hour'))
+								<span class="text-danger">{{$errors->first('start_hour')}}</span>
+								@endif
 							</div>
-						</div>
-						<div class="col-xs-6">
-							<div class="dataTables_filter" id="example1_filter" style="margin-left: 300px;">
-								<label>Search: 
-									<input type="text" aria-controls="example1">
-								</label>
+						</td>
+						<td style="padding-left: 10px;">
+							<div class="form-group">
+								<div class="input-group">
+									<span class="input-group-addon">Finish:</span>
+									<input type="time" class="form-control" id="finish_hour" name="finish_hour" value="{{$check->finish_hour}}" >
+								</div>
+								@if($errors->first('finish_hour'))
+								<span class="text-danger">{{$errors->first('finish_hour')}}</span>
+								@endif
 							</div>
-						</div>
-					</div>
-					<table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
-						<thead>
-							<tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 176px;">STT</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 260px;">Username</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 233px;">Start_hour</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 149px;">Finish_hour</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 105px;">Action</th></tr>
-						</thead>
-
-						<tfoot>
-							<tr><th rowspan="1" colspan="1">STT</th><th rowspan="1" colspan="1">Username</th><th rowspan="1" colspan="1">Start_hour</th><th rowspan="1" colspan="1">Finish_hour</th><th rowspan="1" colspan="1">Action</th></tr>
-						</tfoot>
-						<tbody role="alert" aria-live="polite" aria-relevant="all">
-							@foreach($user as $u)
-							<tr class="odd">
-								<td class="  sorting_1">{{$loop->iteration}}</td>
-								<td class=" ">{{$u->fullname}}</td>
-								<td class=" ">{{$u->start_hour}}</td>
-								<td class=" ">{{$u->finish_hour}}</td>
-								<td class=" ">
-									<div class="btn-group">
-										<button type="button" class="btn btn-success">Action</button>
-										<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-											<span class="caret"></span>
-											<span class="sr-only">Toggle Dropdown</span>
-										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li><a href="admin/edit-checkout/{{$u->id}}.html">Edit</a></li>
-											<li><a href="admin/delete-checkin/{{$u->id}}.html">Delete</a></li>
-										</ul>
-									</div>
-								</td>
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-					<div class="col-xs-6">
-						<div class="dataTables_paginate paging_bootstrap">
-							<ul class="pagination">
-								{{$user->links()}}
-							</ul>
-						</div>
-					</div>
-				</div>
+						</td>
+					</tr>
+				</table>
 			</div>
-		</div><!-- /.box-body -->
+			<div class="modal-footer clearfix">
+
+				<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="location.replace('http://staff-manage.local/admin');" ></i>Cancel</button>
+
+				<button type="submit" class="btn btn-primary pull-left" id="btncheckout" name="btncheckout"></i> OK</button>
+			</div>
+		</form>
 	</div>
-	@endsection
+</div>
+@endsection 
+@section('pagejs')
+<script type="text/javascript">
+	$('#btncheckout').click(function(){
+		var start_h=$("#start_hour").val();
+		var finish_h=$("#finish_hour").val();
+		//alert(start_h);
+		$.ajax({
+			type : "POST",
+			url:"<?php echo url('/admin/checkout') ?>", 
+			data:{start_hour:start_h,finish_hour:finish_h},
+			success: function(){
+				alert('ok');
+			}
+		});
+	});
+	
+</script>
+@endsection

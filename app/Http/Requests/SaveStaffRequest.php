@@ -25,12 +25,13 @@ class SaveStaffRequest extends FormRequest
     {
         return [
             'fullname'=>'required|min:2|max:50',
-            'email'=>'required|email|min:8|max:255',
+            'email'=>'required|email|min:8|max:255|unique:users',
             'password'=>'required|min:8|max:30',
             'phone'=>'required|min:8|max:12',
             'address'=>'required',
-            'larary'=>'required|number',
-            'dob'=>'required'
+            'larary'=>'required',
+            'dob'=>'required',
+            'image' => 'mimes:jpeg,jpg,png,gif,ico|max:2048'
         ];
     }
     public function messages()
@@ -44,6 +45,7 @@ class SaveStaffRequest extends FormRequest
                 'email.email'=>'Email của bạn không hợp lệ !',
                 'email.min'=>'Vui lòng nhập email từ 8 kí tự trở lên !',
                 'email.max'=>'Email dài không quá 255 kí tự',
+                'email.unique'=>'Email này đã tồn tại !',
                 'password.required'=>'Bạn chưa nhập mật khẩu',
                 'password.min'=>'Vui lòng nhập mật khẩu từ 8 kí tự trở lên !',
                 'password.max'=>'Mật khẩu dài không quá 30 kí tự!',
@@ -52,8 +54,9 @@ class SaveStaffRequest extends FormRequest
                 'phone.max'=>'Mật khẩu dài không quá 12 kí tự!',
                 'address.required'=>'Bạn chưa nhập địa chỉ !',
                 'larary.required'=>'Bạn chưa nhập lương !',
-                'larary.number'=>'Vui lòng điền số !',
-                'dob.required'=>'Bạn chưa điền ngày sinh !'
+                'dob.required'=>'Bạn chưa điền ngày sinh !',
+                'image.mimes'=>'Bạn chỉ được upload file ảnh !',
+                'image.max'=>'Kích cỡ file quá lớn !'
         ];
     }
 }

@@ -29,3 +29,4 @@ class LogProvider extends ServiceProvider
         \App\Checkout::observe('\App\Observers\CheckoutObserver::class');
     }
 }
+

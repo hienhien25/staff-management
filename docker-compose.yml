@@ -1,6 +1,8 @@
 version: '3'
 services:
   web:
+    tty: true
+    stdin_open: true
     build: ./docker/web
     ports: 
       - 80:80
@@ -14,3 +16,13 @@ services:
       MYSQL_ROOT_PASSWORD: "root"
     volumes:
       - ./db:/var/backups
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports: 
+      - 8080:80
+    environment:
+      PMA_HOST: "den1.mysql3.gear.host"
+      PMA_USER: "staff"
+      PMA_PASSWORD: "Oy025?R~rWf3"
+    links:
+      - mysql

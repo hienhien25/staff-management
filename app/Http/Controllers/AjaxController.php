@@ -7,7 +7,7 @@ use App\Position;
 
 class AjaxController extends Controller
 {
-    public function getdepartment($iddepartment)
+    public function getDepartment($iddepartment)
     {
     	$pos=Position::where('id_department',$iddepartment)->get();
     	//dd($pos);

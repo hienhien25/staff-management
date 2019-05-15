@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -16,9 +16,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $table='users';
     protected $fillable = [
-        'fullname', 'email','role'
+        'fullname', 'email','active',
     ];
 
     /**
@@ -41,5 +40,9 @@ class User extends Authenticatable
     public function getToken()
     {
         return hash_hmac('sha256',str_random(30), 'secret');
+    }
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

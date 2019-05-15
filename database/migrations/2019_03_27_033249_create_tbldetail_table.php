@@ -18,7 +18,6 @@ class CreateTbldetailTable extends Migration
             $table->unsignedInteger('id_staff');
             $table->date('dob');
             $table->string('gender');
-            $table->string('image');
             $table->double('larary');
             $table->integer('phone');
             $table->text('address');
