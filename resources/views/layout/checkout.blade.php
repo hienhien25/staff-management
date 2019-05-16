@@ -13,15 +13,13 @@
 						<label>
 							<select  name="example1_length" aria-controls="example1">
 								<?php
-								$t=1;
-								for($i=1;$i<=12;$i++)
-								{
-									$t++;
-									?>
+                                $t=1;
+                                for ($i=1;$i<=12;$i++) {
+                                    $t++; ?>
 									<option value="<?echo $t;?>"><?echo $t;?></option>
 									<?php
-								}
-								?>
+                                }
+                                ?>
 								</select> records per page</label>
 							</div>
 						</div>

@@ -8,21 +8,22 @@ use App\Detail;
 use App\Log;
 use Carbon\Carbon;
 use App\Time;
+
 class PageController extends Controller
 {
     public function index()
     {
-    	return view('layout.home');
+        return view('layout.home');
     }
     public function getLogin()
     {
-    	return view('layout.login');
+        return view('layout.login');
     }
-    public function postLogin(Request $req){
+    public function postLogin(Request $req)
+    {
         $remember = $req->has('remember');
-        if(Auth::attempt(['email' => $req->email, 'password' => $req->password], $remember)){
-            if(Auth::user()->active==0)
-            {
+        if (Auth::attempt(['email' => $req->email, 'password' => $req->password], $remember)) {
+            if (Auth::user()->active==0) {
                 return redirect(route('active'));
             }
             $time=new Time();
@@ -33,13 +34,13 @@ class PageController extends Controller
             $log->id_staff=Auth::user()->id;
             $log->save();
             return redirect(route('home'));
-        }else{
+        } else {
             return view('layout.login')->with('err', 'Sai tài khoản/mật khẩu');
         }
     }
     public function logout()
     {
-     Auth::logout();
-     return redirect(route('adminLogin'));
- }
+        Auth::logout();
+        return redirect(route('adminLogin'));
+    }
 }

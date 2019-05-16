@@ -6,6 +6,7 @@ use App\User;
 use App\Log;
 use Carbon\Carbon;
 use Auth;
+
 class UserObserver
 {
     /**
@@ -21,15 +22,13 @@ class UserObserver
         } else {
             $action = 'Updated User';
         }
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $log=new Log();
             $log->id_staff=Auth::user()->id;
             $log->action=$action;
             $log->datetime_log=Carbon::now('Asia/Ho_Chi_Minh');
             $log->save();
         }
-
     }
 
     /**
@@ -51,8 +50,7 @@ class UserObserver
      */
     public function deleted(User $user)
     {
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $log=new Log();
             $log->id_staff=Auth::user()->id;
             $log->action='Deleted User';

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class StatisticSeeder extends Seeder
 {
     /**
@@ -11,15 +12,15 @@ class StatisticSeeder extends Seeder
      */
     public function run()
     {
-       /* $stat=[];
-        for($i=1;$i<=51;$i++)
-        {
-           $s=[
-            'id_month'=>'1'
-            ];
-            array_push($stat, $s);
-        }
+        /* $stat=[];
+         for($i=1;$i<=51;$i++)
+         {
+            $s=[
+             'id_month'=>'1'
+             ];
+             array_push($stat, $s);
+         }
 
-        DB::table('tblstatistic')->insert($stat);*/
+         DB::table('tblstatistic')->insert($stat);*/
     }
 }

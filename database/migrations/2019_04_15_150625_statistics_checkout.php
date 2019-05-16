@@ -13,7 +13,7 @@ class StatisticsCheckout extends Migration
      */
     public function up()
     {
-          //
+        //
     }
 
     /**

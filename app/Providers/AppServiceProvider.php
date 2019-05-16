@@ -16,6 +16,7 @@ use Session;
 use App\Time;
 use App\Statistics;
 use Auth;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**

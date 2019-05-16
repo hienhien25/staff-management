@@ -27,7 +27,8 @@ class SaveDepartmentRequest extends FormRequest
            'department_name'=>'required'
         ];
     }
-     public function messages()
+    
+    public function messages()
     {
         return [
             'department_name.required'=>'Bạn chưa nhập tên phòng !'

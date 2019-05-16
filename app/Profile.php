@@ -8,6 +8,6 @@ class Profile extends Model
 {
     public function getToken()
     {
-    	return hash_hmac('sha256', str_random(30),'secret');
+        return hash_hmac('sha256', str_random(30), 'secret');
     }
 }

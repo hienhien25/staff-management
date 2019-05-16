@@ -19,21 +19,18 @@
 				<td>{{$t->username}}</td>
 				<td>
 					<?php
-					if($t->status==0)
-					{
-						?>
+                    if ($t->status==0) {
+                        ?>
 
 						<i class="fa fa-circle text-success" title="Checkin"></i> 
 						<?php
-					}
-					else if($t->status==1)
-					{
-						?>
+                    } elseif ($t->status==1) {
+                        ?>
 
 						<i class="fa fa-circle text-danger" title="Checkout"></i> 
 						<?php
-					}
-					?>
+                    }
+                    ?>
 				</td>
 				<td>
 					<div class="btn-group" style="width:200px;">

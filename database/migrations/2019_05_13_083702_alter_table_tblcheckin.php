@@ -13,8 +13,8 @@ class AlterTableTblcheckin extends Migration
      */
     public function up()
     {
-         /*Schema::table('tblcheckin', function (Blueprint $table) {
-            $table->time('finish_hour')->nullable();
+        /*Schema::table('tblcheckin', function (Blueprint $table) {
+           $table->time('finish_hour')->nullable();
         });*/
     }
 
@@ -25,8 +25,8 @@ class AlterTableTblcheckin extends Migration
      */
     public function down()
     {
-       /* Schema::table('tblcheckin', function (Blueprint $table) {
-            $table->time('finish_hour')->default('5:30');
-        });*/
+        /* Schema::table('tblcheckin', function (Blueprint $table) {
+             $table->time('finish_hour')->default('5:30');
+         });*/
     }
 }

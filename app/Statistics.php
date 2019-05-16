@@ -6,6 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Statistics extends Model
 {
-	protected $table='tblstatistic';
-	
+    protected $table='tblstatistic';
 }

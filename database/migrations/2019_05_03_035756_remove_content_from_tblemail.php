@@ -13,9 +13,9 @@ class RemoveContentFromTblemail extends Migration
      */
     public function up()
     {
-       /* Schema::table('tblemail', function (Blueprint $table) {
-            $table->dropColumn('content');
-        });*/
+        /* Schema::table('tblemail', function (Blueprint $table) {
+             $table->dropColumn('content');
+         });*/
     }
 
     /**

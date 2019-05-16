@@ -10,10 +10,10 @@ class Department extends Model
     protected $fillable=['department_name','quantity'];
     public function relaStaff()
     {
-    	return $this->hasMany('App\User','id_department');
+        return $this->hasMany('App\User', 'id_department');
     }
     public function relaPosition()
     {
-    	return $this->hasMany('App\Position','id_department');
+        return $this->hasMany('App\Position', 'id_department');
     }
 }

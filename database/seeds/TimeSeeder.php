@@ -12,7 +12,7 @@ class TimeSeeder extends Seeder
     public function run()
     {
         $time=[
-        	['month'=>'4'],
+            ['month'=>'4'],
             ['month'=>'5']
         ];
         DB::table('tbltime')->insert($time);

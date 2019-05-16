@@ -26,7 +26,7 @@ class AddCheckDateToTbltimelog extends Migration
     public function down()
     {
         Schema::table('tbltimelog', function (Blueprint $table) {
-             $table->dropColumn('checkdate');
+            $table->dropColumn('checkdate');
         });
     }
 }

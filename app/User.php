@@ -39,7 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
     public function getToken()
     {
-        return hash_hmac('sha256',str_random(30), 'secret');
+        return hash_hmac('sha256', str_random(30), 'secret');
     }
     public function sendPasswordResetNotification($token)
     {

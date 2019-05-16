@@ -40,12 +40,12 @@
 			<td class=" ">{{$u->finish_hour}}</td>
 			<td class=" ">
 				<?php
-				$start=\Carbon\Carbon::create($u->start_hour);
-				$finish=\Carbon\Carbon::create($u->finish_hour);
-				$totalperday=$finish->diffInMinutes($start);
-				$total=$totalperday/60;
-				echo $total."hours";
-				?>
+                $start=\Carbon\Carbon::create($u->start_hour);
+                $finish=\Carbon\Carbon::create($u->finish_hour);
+                $totalperday=$finish->diffInMinutes($start);
+                $total=$totalperday/60;
+                echo $total."hours";
+                ?>
 			</td>
 			<td>
 				@if($u->status==0)

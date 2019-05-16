@@ -14,17 +14,16 @@ class StaffSeeder extends Seeder
     {
         $faker= \Faker\Factory::create();
         $staff=[];
-        for($i=0;$i<50;$i++)
-        {
+        for ($i=0;$i<50;$i++) {
             $s = [
-                'id_department' => rand(1,3),
-                'image'=>"images/".rand(1,10).'.jpeg',
+                'id_department' => rand(1, 3),
+                'image'=>"images/".rand(1, 10).'.jpeg',
                 'fullname' => $faker->name,
                 'email' => Str::random(10).'@gmail.com',
                 'password' => bcrypt('secret'),
-                'role' => rand(0,1)
+                'role' => rand(0, 1)
             ];
-            array_push($staff,$s);
+            array_push($staff, $s);
         }
         DB::table('users')->insert($staff);
     }

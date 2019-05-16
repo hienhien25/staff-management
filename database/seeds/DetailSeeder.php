@@ -11,6 +11,6 @@ class DetailSeeder extends Seeder
      */
     public function run()
     {
-   		//
+        //
     }
 }

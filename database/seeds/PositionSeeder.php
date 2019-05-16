@@ -14,33 +14,33 @@ class PositionSeeder extends Seeder
      */
     public function run()
     {
-    	$pos=[
-    		[
+        $pos=[
+            [
                 'id_department'=> 1,
-    			'position_name'=>'Intern',
-    			'description'=>Str::random(20)
-    		],
-    		[
+                'position_name'=>'Intern',
+                'description'=>Str::random(20)
+            ],
+            [
                 'id_department'=> 1,
-    			'position_name'=>'Fresher',
-    			'description'=>Str::random(20)
-    		],
-    		[
+                'position_name'=>'Fresher',
+                'description'=>Str::random(20)
+            ],
+            [
                 'id_department'=> 3,
-    			'position_name'=>'Senior',
-    			'description'=>Str::random(20)
-    		],
-    		[
+                'position_name'=>'Senior',
+                'description'=>Str::random(20)
+            ],
+            [
                 'id_department'=> 2,
-    			'position_name'=>'Junior',
-    			'description'=>Str::random(20)
-    		],
-    		[
+                'position_name'=>'Junior',
+                'description'=>Str::random(20)
+            ],
+            [
                 'id_department'=> 1,
-    			'position_name'=>'Coder',
-    			'description'=>Str::random(20)
-    		]
-    	];
+                'position_name'=>'Coder',
+                'description'=>Str::random(20)
+            ]
+        ];
         DB::table('tblposition')->insert($pos);
     }
 }

@@ -93,21 +93,20 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
             <?php
             $date=date('Y-m-d');
             $check=DB::table('tblcheckin')
-            ->join('tblstatistic','tblcheckin.id_statist','=','tblstatistic.id')
-            ->where('tblstatistic.id_staff',Auth::user()->id)
-            ->where('tblcheckin.check_date',$date)
+            ->join('tblstatistic', 'tblcheckin.id_statist', '=', 'tblstatistic.id')
+            ->where('tblstatistic.id_staff', Auth::user()->id)
+            ->where('tblcheckin.check_date', $date)
             ->first();
-            if(!isset($check))
-            {
+            if (!isset($check)) {
                 ?>
                 <li><a   data-url="{!! URL::route('admin.checkin') !!}" data-id="{{Auth::user()->id}}" id="btncheckin" class="btncheckin
                     ">Checkin</a></li>
                     <?php
-                }elseif(isset($check)&&$check->status==0){
-                    ?>
+            } elseif (isset($check)&&$check->status==0) {
+                ?>
                     <li><a  data-url="{!! URL::route('admin.checkout') !!}" data-id="{{Auth::user()->id}}" id="btncheckout" class="btncheckout">Checkout</a></li>
                     <?php
-                }
+            }
                 ?>
 
 
