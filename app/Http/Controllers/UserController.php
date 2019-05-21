@@ -81,16 +81,31 @@ class UserController extends Controller
                 $st->image = $path;
             }
             $st->password=Hash::make($req->password);
-            $st->role=$req->role;
+            if(Auth::user()->role==1)
+            {
+               $st->role=$req->role; 
+            }
             $st->save();
             $std=Detail::where('id_staff', $id)->first();
-            $std->id_staff=$id;
-            $std->dob=$req->dob;
-            $std->larary=$req->larary;
-            $std->gender=$req->gender;
-            $std->phone=$req->phone;
-            $std->address=$req->address;
-            $std->save();
+            if ($std) {
+                $std->id_staff=$id;
+                $std->dob=$req->dob;
+                $std->larary=$req->larary;
+                $std->gender=$req->gender;
+                $std->phone=$req->phone;
+                $std->address=$req->address;
+                $std->save();
+            }else {
+                $dt=new Detail();
+                $dt->id_staff=$id;
+                $dt->dob=$req->dob;
+                $dt->larary=$req->larary;
+                $dt->gender=$req->gender;
+                $dt->phone=$req->phone;
+                $dt->address=$req->address;
+                $dt->save();
+            }
+            
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -138,5 +153,18 @@ class UserController extends Controller
             throw new Exception("System Error", 1);
         }
         return redirect(route('home'));
+    }
+    public function changeUright(Request $req)
+    {
+        $idrole=$req->idrole;
+        $iduser=$req->iduser;
+        //dd($iduser);
+        $user=User::where('id',$iduser)->first();
+        $user->role=$idrole;
+        if(!$user->save())
+        {
+            throw new Exception("Error Processing Request", 1);
+            
+        }
     }
 }
