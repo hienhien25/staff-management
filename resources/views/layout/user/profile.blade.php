@@ -92,7 +92,7 @@
 
 								<div class="form-group">
 									<div class="col-sm-offset-0 col-sm-10">
-										<a onclick="return checksubmit();" id="ctl02_ctl00_lbcontacinfo" class="btn btn-primary" href="#">
+										<a onclick="return checksubmit();" class="btn btn-primary" href="#">
 										Cập nhật thông tin liên hệ</a>
 										<button type="button" class="btn btn-space btn-default" onclick="window.history.back();">Quay lại</button>
 									</div>
@@ -162,7 +162,10 @@
 					</div>
 				</div>
 				<div class="panel panel-flat" >
+					<form action="admin/profile" method="post" >
+					@csrf
 					<div class="panel-heading panel-heading-divider" style="padding-left: 30px;"><b>BẢNG CẬP NHẬT</b></div>
+					<input type="hidden" value="{{$depa->id}}" name="department">
 					<div class="panel-body" style="padding-left: 0px;margin-left: 0px;">
 						<table class="no-border no-strip skills" style="padding-left: 0px;margin:30px; width: 60%;" >
 							<tbody class="no-border-x no-border-y">
@@ -182,14 +185,14 @@
 										</div>
 									</td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td>
 										<div class="form-group">
 											<label for="usr">Password:</label>
 											<input type="password" name="password" class="form-control" id="usr" value="{{$pr->password}}">
 										</div>
 									</td>
-								</tr>
+								</tr> -->
 								<tr>
 									<td>
 										<div class="form-group">
@@ -211,12 +214,12 @@
 						</table>
 						<div class="form-group">
 							<div class="col-sm-offset-0 col-sm-10" style="padding-left: 30px;">
-								<a onclick="return checksubmit();" id="ctl02_ctl00_lbcontacinfo" class="btn btn-primary" href="javascript:__doPostBack('ctl02$ctl00$lbcontacinfo','')">
-								Cập nhật thông tin liên hệ</a>
-								<button type="button" class="btn btn-space btn-default" onclick="return Back();">Quay lại</button>
+								<button type="submit" class="btn btn-primary" >Cập nhật thông tin </button>
+								<button type="button" class="btn btn-space btn-default " onclick="window.history.back();" >Quay lại</button>
 							</div>
 						</div>
 					</div>
+				</form>
 				</div>               
 			</div>
 		</div>

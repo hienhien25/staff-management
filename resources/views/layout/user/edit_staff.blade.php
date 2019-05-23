@@ -13,7 +13,7 @@ $defaultImg = $st->image == null ? asset('images/ImageDefault.png') : $st->image
              <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form role="form" action="admin/edit-staff/{{$st->id}}.html" method="post" enctype="multipart/form-data">
+                        <form role="form" action="admin/post-edit-staff/{{$st->id}}.html" method="post" enctype="multipart/form-data">
                             @csrf
                             <table style="width:100%;">
                                 <tr>
@@ -61,6 +61,7 @@ $defaultImg = $st->image == null ? asset('images/ImageDefault.png') : $st->image
                                             @endforeach
                                         </select>
                                     </div>
+                                    @if(Auth::user()->role==1)
                                     <div class="form-group">
                                      <label for="sel1">Role :</label>
                                      <select class="form-control" id="sel1" name="role" style="width: 400px;"> 
@@ -68,6 +69,7 @@ $defaultImg = $st->image == null ? asset('images/ImageDefault.png') : $st->image
                                         <option value="1"  @if($st->role==1)<?php echo "selected";?>@endif>Admin</option>
                                     </select>
                                 </div>
+                                @endif
                             </td>
                             <td style="width: 480px;margin: auto;padding-left: 50px;">
                              <div class="form-group" style="width: 480px;margin: auto;padding-left: 50px;">

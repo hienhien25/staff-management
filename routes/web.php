@@ -39,7 +39,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::get('department-list', 'DepartmentController@showList')->name('admin.departmentList');
     Route::get('add-department', 'DepartmentController@getAdd')->name('admin.addDepartment');
     Route::post('add-department', 'DepartmentController@postAdd')->name('admin.addDepartment');
-    Route::post('delete-department/{id}.html', 'DepartmentController@getDelete')->name('admin.deleteDepartment');
+    Route::post('delete-department', 'DepartmentController@postDelete')->name('admin.deleteDepartment');
     Route::post('edit-department/{id}.html', 'DepartmentController@postEdit')->name('admin.editDepartment');
     Route::get('export-department-list-to-excel', 'DepartmentController@export')->name('exportDepartment');
     //Position
@@ -47,20 +47,22 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::get('staff-list/{id}.html', 'PositionController@showStaffList')->name('admin.position.staffList');
     Route::get('add-position', 'PositionController@getAdd')->name('admin.addPosition');
     Route::post('add-position', 'PositionController@postAdd')->name('admin.addPosition');
-    Route::post('edit-position/{id}.html', 'PositionController@postEdit')->name('admin.editPosition');
+    Route::post('edit-position', 'PositionController@postEdit')->name('admin.editPosition');
     Route::post('delete-position/{id}.html', 'PositionController@postDelete')->name('admin.deletePosition');
+    Route::get('get-edit-position/{id}','PositionController@getEditPosition')->name('admin.editPosition');
     //User
     Route::get('user-list', 'UserController@showList')->name('admin.userList');
     Route::get('add-staff', 'UserController@getAdd')->name('admin.user.addStaff');
     Route::post('add-staff', 'UserController@postAdd')->name('admin.user.addStaff');
     Route::get('edit-staff/{id}.html', 'UserController@getEdit')->name('admin.user.editStaff');
-    Route::post('edit-staff/{id}.html', 'UserController@postEdit')->name('admin.user.editStaff');
+    Route::post('post-edit-staff/{id}.html', 'UserController@postEdit')->name('admin.user.editStaff');
     Route::post('delete-staff/{id}', 'UserController@getDelete')->name('admin.user.deleteStaff');
+    Route::post('change-uright','UserController@changeUright')->name('admin.user.changeUright');
     //Ajax
     Route::get('ajax-department/{iddepartment}', 'AjaxController@getDepartment')->name('admin.ajaxDepartment');
     //Profile
     Route::get('profile/{id}.html', 'UserController@getProfile')->name('profile');
-    Route::post('profile/{id}.html', 'UserController@postEdit')->name('profile');
+    Route::post('profile', 'UserController@postEditProfile')->name('profile');
     //Checkin
     Route::get('checkin', 'CheckinController@getCheckin')->name('admin.checkin');
     Route::post('post-checkin', 'CheckinController@postCheckin')->name('admin.checkin');
@@ -86,6 +88,9 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::delete('destroy-log/{id}', 'LogController@destroy')->name('admin.destroyLog');
     Route::post('delete-many-time-log', 'LogController@deleteMany')->name('admin.deleteMany');
     Route::post('delete-time-log', 'LogController@deleteTimeLog')->name('admin.deleteTimeLog');
+    Route::get('detail-time-log/{id}','LogController@getDetailTimeLog')->name('admin.detailTimeLog');
+    Route::get('get-edit-time-log/{id}','LogController@getEditTimeLog')->name('admin.getEditTimeLog');
+    Route::post('edit-time-log','LogController@postEditTimeLog')->name('admin.editTimeLog');
     //Statistics total working hours
     Route::get('show-checkout-list-per-month', 'StatisticController@getShowListPerMonth')->name('CheckoutListPerMonth');
     Route::get('search-checkout-per-day', 'StatisticController@getSearch')->name('admin.search');

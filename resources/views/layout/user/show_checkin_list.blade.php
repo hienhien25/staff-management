@@ -27,7 +27,7 @@
 				<div class="col-xs-6">
 					<div id="example1_length" class="dataTables_length">
 						<div class="btn-group" >
-							<a type="button" class="btn btn-primary" href="admin/export-statistic-per-month">Export to excel</a>
+							<a type="button" class="btn btn-primary" id="exportData">Export to excel</a>
 							<div class="btn-group">
 								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 									Month  <span class="caret"></span></button>
@@ -52,8 +52,9 @@
 							</div>
 						</div>
 					</div>
+					<div class="box-body">
 					@yield('main')
-
+					</div>
 				</div>
 			</div>
 		</div><!-- /.box-body -->

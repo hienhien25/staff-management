@@ -67,8 +67,8 @@
 					<tr class="odd">
 						<td class="  sorting_1" style="width:50px;">{{$loop->iteration}}</td>
 						<td class=" ">{{$stat->month}}</td>
-						<td><?php $total=$stat->total_working_hour; $t=$total/60; echo $t."hours";?></td>
-						<td><?php $total=$stat->total_leave_hour; $t=$total/60; echo $t."hours";?></td>
+						<td><?php $total=$stat->total_working_hour; $t=$total/60; echo round($t)."hours";?></td>
+						<td><?php $total=$stat->total_leave_hour; $t=$total/60; echo round($t)."hours";?></td>
 					</tr>
 					@endforeach
 				</tbody>

@@ -21,9 +21,13 @@ class DepartmentController extends Controller
 {
     public function showList()
     {
-        $dep=Department::paginate(12);
-        $sl=DB::table('users')->where('id_department', '=', 1)->get();
-        $qtt=count($sl);
+        //$dep=Department::paginate(12);
+        $dep=DB::table('tbldepartment')
+        ->join('users','tbldepartment.id','users.id_department')
+        ->select(DB::raw('count(*) as quantity,id_department'))
+        ->groupBy('id_department')
+        ->paginate(12);
+        //dd($sl);
         //dd($qtt);
         return view('layout.department.department_list', compact('dep'));
     }
@@ -33,30 +37,49 @@ class DepartmentController extends Controller
     }
     public function postAdd(SaveDepartmentRequest $req)
     {
-        $de= new Department();
-        $de->fill($req->all());
-        if (!$de->save()) {
-            throw new Exception("System Error", 1);
+        //dd($req->department_name);
+        DB::beginTransaction();
+        try {
+            $de= new Department();
+            $de->department_name=$req->department_name;
+            $de->quantity=0;
+            if (!$de->save()) {
+                throw new Exception("System Error", 1);
+            }
+            //dd($de->id);
+            $position=new Position();
+            $position->id_department=$de->id;
+            $position->position_name=$req->position;
+            $position->description='Vị trí mới thiêt lập ';
+            $position->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw new Exception("Error Processing Request", 1);
+            
         }
+        
         return redirect(route('admin.departmentList'));
     }
     public function showListPosition($id)
     {
         $pos=DB::table('tbldepartment')
-       ->leftjoin('tblposition', 'tblposition.id_department', '=', 'tbldepartment.id')
-       ->where('id_department', $id)
-       ->select('tbldepartment.*', 'tblposition.*', 'tbldepartment.department_name as department_name', 'tblposition.position_name as position_name', 'tblposition.description as description')
-       ->paginate(12);
+        ->leftjoin('tblposition', 'tblposition.id_department', '=', 'tbldepartment.id')
+        ->where('id_department', $id)
+        ->select('tbldepartment.*', 'tblposition.*', 'tbldepartment.department_name as department_name', 'tblposition.position_name as position_name', 'tblposition.description as description')
+        ->paginate(12);
         return view('layout.position.list_position', compact('pos'));
     }
-    public function getDelete($id)
+    public function postDelete(Request $req)
     {
+        $id=$req->id;
+        dd($id);
         $de=Department::find($id);
         if (!$de->delete()) {
             throw new Exception("System Error", 1);
         }
-        Session::put('success', 'Your Record Deleted Successfully.');
-        return redirect(route('admin.departmentList'));
+        //Session::put('success', 'Your Record Deleted Successfully.');
+        return response()->json(['success'=>true]);
     }
     public function postEdit(Request $req, $id)
     {

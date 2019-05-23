@@ -44,7 +44,7 @@
                 $finish=\Carbon\Carbon::create($u->finish_hour);
                 $totalperday=$finish->diffInMinutes($start);
                 $total=$totalperday/60;
-                echo $total."hours";
+                echo round($total)."hours";
                 ?>
 			</td>
 			<td>

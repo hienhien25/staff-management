@@ -40,7 +40,7 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
                     <span>Department</span>
                     <i class="fa pull-right fa-angle-left"></i>
                 </a>
-                <ul class="treeview-menu" style="display: none;">
+                <ul class="treeview-menu" >
                     <li><a href="{{route('admin.departmentList')}}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i>Department List</a></li>
                     
                 </ul>
@@ -57,7 +57,7 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
                 <span>Statistics</span>
                 <i class="fa pull-right fa-angle-left"></i>
             </a>
-            <ul class="treeview-menu" style="display: none;">
+            <ul class="treeview-menu" >
                 <li><a href="{{route('CheckoutListPerMonth')}}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i>All Staff List</a></li>
                 <li><a href="{{route('admin.statisticPersonal')}}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i>Personal</a></li>
 
@@ -120,40 +120,6 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
 </section>
 <!-- /.sidebar -->
 </aside>
-<!-- checkin -->
-<!-- <form action="{{route('admin.checkin')}}"  class="remove-record-model" method="post">
-    @csrf
-    <div id="custom-width-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                 <h4 class="modal-title" style="color: blue;text-align: center;"><i class="fa fa-fw fa-check-square-o"></i>Checkin  </h4>
-             </div>
-             <div class="modal-body">
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"> Start hours:</span>
-                        <input type="time" class="form-control" id="start_hour" name="start_hour">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Finish hours:</span>
-                        <input type="time" class="form-control" id="finish_hour" name="finish_hour">
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer clearfix">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"  ></i>Cancel</button>
-
-                <button type="submit" class="btn btn-primary pull-left" id="checkin"></i> OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-</form> -->
 <!-- Add member -->
 <div class="modal fade" id="addMember" tabindex="-1" role="dialog" aria-hidden="true" >
     <div class="modal-dialog">
@@ -213,7 +179,7 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
                 });
                 
             } else {
-                swal("Cancelled", "Your imaginary file is safe :)", "error");
+                swal("Cancelled", "Your imaginary file is safe :", "error");
             }
         });
         });

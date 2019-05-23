@@ -44,7 +44,13 @@
                                 <td class="  sorting_1">{{$loop->iteration}}</td>
                                 <td class=" ">{{$s->fullname}}</td>
                                 <td class=" ">{{$s->email}}</td>
-                                <td class=" ">{{$s->role}}</td>
+                                <td class=" ">
+                                    @if($s->role==0)
+                                    <?php echo "User"; ?>
+                                    @elseif($s->role==1)
+                                    <?php echo "Admin"; ?>
+                                    @endif
+                                </td>
                                 @if(Auth::user()->role==1)
                                 <td class=" ">
                                     <a href="admin/edit-staff/{{$s->id}}.html" class="btn btn-info">Edit</a>

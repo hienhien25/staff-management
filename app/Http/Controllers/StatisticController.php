@@ -53,11 +53,12 @@ class StatisticController extends Controller
     }
     public function getExport(Request $req)
     {
+        $mon=Carbon::now()->month;
         $excel=new PHPExcel();
         $stat=DB::table('tblstatistic')
         ->join('tbltime', 'tblstatistic.id_month', '=', 'tbltime.id')
         ->rightjoin('users', 'tblstatistic.id_staff', '=', 'users.id')
-        ->where('tbltime.month', $req->month)
+        ->where('tbltime.month', $mon)
         ->select('tblstatistic.*', 'tbltime.*', 'users.*', 'tbltime.month as month', 'tblstatistic.id_staff as id_staff', 'tblstatistic.total_working_hour as total_working_hour', 'users.fullname as fullname', 'tblstatistic.total_leave_hour as total_leave_hour')
         ->get();
         //dd($stat);
@@ -75,8 +76,8 @@ class StatisticController extends Controller
             $sheet->setCellValue('A'.$rowCount, $rowCount-1);
             $sheet->setCellValue('B'.$rowCount, $t->month);
             $sheet->setCellValue('C'.$rowCount, $t->fullname);
-            $sheet->setCellValue('D'.$rowCount, $t->total_working_hour);
-            $sheet->setCellValue('E'.$rowCount, $t->total_leave_hour);
+            $sheet->setCellValue('D'.$rowCount,round( $t->total_working_hour/60).'hours');
+            $sheet->setCellValue('E'.$rowCount, round($t->total_leave_hour/60).'hours');
         }
         $filename='statistics.xlsx';
         header("Content-Type: application/force-download");

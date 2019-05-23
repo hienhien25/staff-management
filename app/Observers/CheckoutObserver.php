@@ -21,7 +21,7 @@ class CheckoutObserver
             $log->action='Checkout';
             $log->save();
             $t=TimeLog::where('user_id', Auth::user()->id)
-                        ->where('checkdate', date('Y-m-d'))
+                        ->where('check_date', date('Y-m-d'))
                         ->first();
             //dd($t);
             $timelog->status=1;

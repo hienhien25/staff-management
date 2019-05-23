@@ -12,13 +12,14 @@ class PositionController extends Controller
 {
     public function showStaffList($id)
     {
+        //dd($id);
         $sh=DB::table('tbldepartment')
         ->join('tblposition', 'tbldepartment.id', '=', 'tblposition.id_department')
         ->rightJoin('users', 'tbldepartment.id', '=', 'users.id_department')
-        ->where('users.id_department', $id)
+        ->where('tblposition.id', $id)
         ->select('tbldepartment.*', 'tblposition.*', 'users.*', 'users.fullname as fullname', 'users.email as email', 'users.role as role')
         ->paginate(12);
-        //dd($sh);
+        //$staff=DB::table('tbldepartment')
         return view('layout.position.show_list_staff', compact('sh'));
     }
     public function postDelete(Request $req, $id)
@@ -54,5 +55,11 @@ class PositionController extends Controller
             throw new Exception("System Error ", 1);
         }
         return redirect()->back();
+    }
+    public function getEditPosition($id)
+    {
+        $position=Position::where('id',$id)->get();
+        dd($position);
+        return response()->json(['position_name'=>$position->position_name,'description'=>$position->description]);
     }
 }

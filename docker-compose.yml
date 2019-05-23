@@ -21,8 +21,8 @@ services:
     ports: 
       - 8080:80
     environment:
-      PMA_HOST: "den1.mysql3.gear.host"
-      PMA_USER: "staff"
-      PMA_PASSWORD: "Oy025?R~rWf3"
+      PMA_HOST: "mysql"
+      PMA_USER: "root"
+      PMA_PASSWORD: "root"
     links:
       - mysql

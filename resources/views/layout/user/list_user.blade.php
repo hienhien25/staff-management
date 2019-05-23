@@ -55,7 +55,7 @@
                                 @elseif(Auth::user()->role==1)
                                 <td >
                                     <div class="form-group" style="width:100px;" id="role" class="role" >
-                                        <select class="form-control" id="uright" name="uright"  style="width:85px;" data-id="{{$u->id}}" onchange="myFunction()">
+                                        <select class="form-control" id="uright" name="uright"  style="width:85px;" data-id="{{$u->id}}" onchange="myFunction({{$u->id}})">
                                             <option value="0" id="user" @if($u->role==0){{"selected"}}@endif>User</option>
                                             <option value="1" id="admin" @if($u->role==1){{"selected"}}@endif>Admin</option>
                                         </select>
@@ -63,10 +63,15 @@
                                 </td>
                                 @endif
                                 <td class=" " style="width:200px;">
-                                    <a href="admin/edit-staff/{{$u->id}}.html" class="btn btn-info">Update</a>
-                                    @if(Auth::user()->role==1)
-                                    <a href="admin/delete-staff/{{$u->id}}.html" class="btn btn-danger">Delete</a>
-                                    @endif
+                                    <form method="POST" class="form-delete" action="admin/delete-staff/{{$u->id}}.html">
+                                        @csrf
+                                        <a href="admin/edit-staff/{{$u->id}}.html" class="btn btn-info">Update</a>
+                                        <input type="hidden" name="idpos" value="{{$u->id}}"/>
+                                        <input type="hidden" name="request_name" value="delete_position"/>
+                                        @if(Auth::user()->role==1)
+                                        <a href="admin/delete-staff/{{$u->id}}.html" id="delete" class="btn btn-danger">Delete</a>
+                                        @endif
+                                    </form>
                                 </td>
                             </tr>   
                             @endforeach
@@ -88,30 +93,37 @@
 @endsection
 @section('pagejs')
 <script type="text/javascript">
-    function myFunction()
+    function myFunction(id)
     {
+        //alert(id);
         var idrole=document.getElementById("uright").value;;
-        var iduser=document.getElementById("uright").getAttribute('data-id');
+        //var iduser=document.getElementById("uright").getAttribute('data-id');
         //alert(iduser);
         $.ajax({
             type:'POST',
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             url:'<?php echo url('/admin/change-uright'); ?>',
-            data:{'idrole':idrole,'iduser':iduser},
+            data:{'idrole':idrole,'id':id},
             success:function(data){
                 alert('Đã thực hiện thay đổi quyền !');
             }
 
         });
     }
-   /* $(document).ready(function(){
-       $('#uright').change(function(){
-            var idrole=$(this).val();
-            var iduser=$(this).attr('data-id');
-            alert(idrole);
+    $(document).ready(function(){
+        $('.btn-danger').click(function(){
+            $(this).parent().submit();
+            return false;
         });
+         $('.form-delete').submit(function(){
+          if(!confirm('Are you sure you want to delete !')){
+            return false;
+        }
+        $(this).append('<input type="hidden" name="redirect" value="'+window.location.href+'"/>');
+        return true;
 
-    });*/
+    });
+    });
     
 </script>
 @endsection

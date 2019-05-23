@@ -46,7 +46,7 @@
                                 <td class=" ">
                                     <form method="POST" class="form-delete" action="admin/delete-position/{{$p->id}}.html ">
                                         @csrf
-                                        <a href="admin/edit-position/{{$p->id}}.html" class="btn btn-info">Edit</a>
+                                        <a id="btnedit" data-toggle="modal" data-target="#edit" data-id="{{$p->id}}" class="btn btn-info">Edit</a>
                                         <input type="hidden" name="idpos" value="{{$p->id}}"/>
                                         <input type="hidden" name="request_name" value="delete_position"/>
                                         <a href="admin/delete-position/{{$p->id}}.html" class="btn btn-danger" id="delete">Delete</a>
@@ -71,6 +71,41 @@
     </div><!-- /.box -->
 </div>
 </div>
+<!-- Edit -->
+<div class="modal fade" id="edit" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" >
+                <form action="" method="post" id="formedit">
+                    <div class="form-group">
+                        <div class="input-group" id="position">
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group" id="description">
+                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="save">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 @endsection
 @section('pagejs')
 <script type="text/javascript">
@@ -80,25 +115,7 @@
             return false;
         });
         $('.form-delete').submit(function(){
-         /*swal({
-            title: "Are you sure you want to delete ?",
-            text: "You will not be able to recover this imaginary file!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#DD6B55',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: "No, cancel plx!",
-            closeOnConfirm: false,
-            closeOnCancel: false
-        },
-        function(isConfirm){
-            if (isConfirm){
-              swal("Deleted!", "Your imaginary file has been deleted!", "success");
-              
-          } else {
-              swal("Cancelled", "Your imaginary file is safe :)", "error");
-          }
-          });*/
+        
           if(!confirm('Are you sure you want to delete !')){
             return false;
         }
@@ -106,27 +123,11 @@
         return true;
 
     });
-        $('.btn-info').click(function(){
-          $(this).addClass('editMode');
-        });
 
         $(".btn-info").focusout(function(){
-          $(this).removeClass("editMode");
-          var id = this.id;
-          var split_id = id.split("_");
-          var field_name = split_id[0];
-          var edit_id = split_id[1];
-          var value = $(this).text();
-
-          $.ajax({
-           url: '/admin/edit-position/"+id+".html',
-           type: 'post',
-           data: { field:field_name, value:value, id:edit_id },
-           success:function(response){
-            console.log('Save successfully');
-        }
-         });
-
+          var id=$(this).attr('data-id');
+          alert(id);
+          $.get('/admin/')
         });
 
     });

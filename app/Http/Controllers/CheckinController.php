@@ -22,34 +22,40 @@ class CheckinController extends Controller
     }
     public function postCheckin(CheckinRequest $req)
     {
-        $m=Carbon::now()->month;
-        $time=Time::where('month', $m)->first();
-        // Kiểm tra xem trong bảng thống kê đã có record lưu thống kê của user trong thangs hiện tại chưa
-        $check=Statistics::where('id_staff', Auth::user()->id)
+        DB::beginTransaction();
+        try {
+            $m=Carbon::now()->month;
+            $time=Time::where('month', $m)->first();
+            // Kiểm tra xem trong bảng thống kê đã có record lưu thống kê của user trong thangs hiện tại chưa
+            $check=Statistics::where('id_staff', Auth::user()->id)
                             ->where('id_month', $time->id)
                             ->get();
-        //dd($check);
-        if (!empty($check)) {// Nếu ko có
-            //Lưu thêm trường này vào tblstatistic
-            $sta= new Statistics();
-            $sta->id_month=$time->id;
-            $sta->id_staff =Auth::user()->id;
-            if (!$sta->save()) {
-                throw new Exception("System Error ", 1);
+            // dd(isset(($check));
+            if (!isset($check)) {// Nếu ko có
+                //Lưu thêm trường này vào tblstatistic
+                $sta= new Statistics();
+                $sta->id_month=$time->id;
+                $sta->id_staff =Auth::user()->id;
+                if (!$sta->save()) {
+                    throw new Exception("System Error ", 1);
+                }
             }
-        }
-        $month=Statistics::where('id_month', $time->id)
+            $month=Statistics::where('id_month', $time->id)
                         ->where('id_staff', Auth::user()->id)
                         ->first();
-        //dd($month);
-        $check= new Checkin;
-        $check->fill($req->all());
-        $check->id_statist=$month->id;
-        $check->check_date=date('Y-m-d');
-        if (!$check->save()) {
-            throw new Exception("Error ", 1);
+            //dd($month);
+            $check= new Checkin;
+            $check->start_hour=$req->start_hour;
+            $check->id_statist=$month->id;
+            $check->check_date=date('Y-m-d');
+            if (!$check->save()) {
+                throw new Exception("Error ", 1);
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw new Exception("Error Processing Request", 1);     
         }
-
         return response()->json(['success'=>'Successfully!']);
     }
     public function showList(Request $req)

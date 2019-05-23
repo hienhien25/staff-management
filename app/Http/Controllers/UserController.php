@@ -81,9 +81,8 @@ class UserController extends Controller
                 $st->image = $path;
             }
             $st->password=Hash::make($req->password);
-            if(Auth::user()->role==1)
-            {
-               $st->role=$req->role; 
+            if (Auth::user()->role==1) {
+                $st->role=$req->role;
             }
             $st->save();
             $std=Detail::where('id_staff', $id)->first();
@@ -95,7 +94,7 @@ class UserController extends Controller
                 $std->phone=$req->phone;
                 $std->address=$req->address;
                 $std->save();
-            }else {
+            } else {
                 $dt=new Detail();
                 $dt->id_staff=$id;
                 $dt->dob=$req->dob;
@@ -105,7 +104,7 @@ class UserController extends Controller
                 $dt->address=$req->address;
                 $dt->save();
             }
-            
+        
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -157,14 +156,33 @@ class UserController extends Controller
     public function changeUright(Request $req)
     {
         $idrole=$req->idrole;
-        $iduser=$req->iduser;
+        $iduser=$req->id;
         //dd($iduser);
-        $user=User::where('id',$iduser)->first();
+        $user=User::where('id', $iduser)->first();
         $user->role=$idrole;
-        if(!$user->save())
-        {
+        if (!$user->save()) {
+            throw new Exception("Error Processing Request", 1);
+        }
+    }
+    public function postEditProfile(Request $req)
+    {
+        DB::beginTransaction();
+        try {
+            $profile=User::where('id', Auth::user()->id)->first();
+            //dd($profile);
+            $profile->fullname=$req->fullname;
+            $profile->email=$req->email;
+            $profile->save();
+            $detailProfile=Detail::where('id_staff', Auth::user()->id)->first();
+            $detailProfile->phone=$req->phone;
+            $detailProfile->address=$req->address;
+            $detailProfile->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
             throw new Exception("Error Processing Request", 1);
             
         }
+        return redirect()->back();
     }
 }
