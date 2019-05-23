@@ -70,6 +70,8 @@
 			<div class="col-md-12">
 				<div class="user-info-list panel panel-default">
 					<div class="panel panel-flat">
+						<form action="{{route('admin.updateContactInformation')}}" method="post" >
+						@csrf
 						<div class="panel-heading panel-heading-divider"><b>THÔNG TIN LIÊN HỆ</b></div>
 						<div class="panel-body">
 							<div class="form-horizontal">
@@ -92,13 +94,15 @@
 
 								<div class="form-group">
 									<div class="col-sm-offset-0 col-sm-10">
-										<a onclick="return checksubmit();" class="btn btn-primary" href="#">
-										Cập nhật thông tin liên hệ</a>
+										<button class="btn-primary" type="submit">Cập nhật thông tin liên hệ </button>
+										<!-- <a onclick="return checksubmit();" class="btn btn-primary" href="#">
+										Cập nhật thông tin liên hệ</a> -->
 										<button type="button" class="btn btn-space btn-default" onclick="window.history.back();">Quay lại</button>
 									</div>
 								</div>
 							</div>
 						</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -185,14 +189,32 @@
 										</div>
 									</td>
 								</tr>
-								<!-- <tr>
+								<tr>
 									<td>
 										<div class="form-group">
-											<label for="usr">Password:</label>
-											<input type="password" name="password" class="form-control" id="usr" value="{{$pr->password}}">
+											<label for="usr">Date of birth:</label>
+											<input type="date" name="dob" class="form-control" id="dob" value="@if(isset($dp)){{$dp->dob}}@endif">
 										</div>
 									</td>
-								</tr> -->
+								</tr>
+								<tr>
+									<td>
+										<div class="form-group">
+                                            <label for="exampleInputEmail1">Gender :</label>
+                                            <input type="radio" name="gender" value="Nam" @if(isset($dp)&& $dp->gender=='Nam'){{"checked"}}@endif > Male
+                                            <input type="radio" name="gender" value="Nữ" @if(isset($dp)&& $dp->gender=='Nữ'){{"checked"}}@endif> Female
+                                            <input type="radio" name="gender" value="Khác" @if(isset($dp)&& $dp->gender=='Khac'){{"checked"}}@endif> Other
+                                        </div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-group">
+											<label for="usr">Larary :</label>
+											<input type="number" class="form-control" name="larary" id="usr" value="@if(isset($dp)){{$dp->larary}}@endif">
+										</div>
+									</td>
+								</tr>
 								<tr>
 									<td>
 										<div class="form-group">

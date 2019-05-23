@@ -29,9 +29,9 @@ class CheckinController extends Controller
             // Kiểm tra xem trong bảng thống kê đã có record lưu thống kê của user trong thangs hiện tại chưa
             $check=Statistics::where('id_staff', Auth::user()->id)
                             ->where('id_month', $time->id)
-                            ->get();
-            // dd(isset(($check));
-            if (!isset($check)) {// Nếu ko có
+                            ->first();
+            //dd(empty($check));
+            if (!$check) {// Nếu ko có
                 //Lưu thêm trường này vào tblstatistic
                 $sta= new Statistics();
                 $sta->id_month=$time->id;
@@ -54,7 +54,7 @@ class CheckinController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            throw new Exception("Error Processing Request", 1);     
+            throw new Exception("Error Processing Request", 1);
         }
         return response()->json(['success'=>'Successfully!']);
     }

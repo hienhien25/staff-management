@@ -88,23 +88,15 @@ class UserController extends Controller
             $std=Detail::where('id_staff', $id)->first();
             if ($std) {
                 $std->id_staff=$id;
-                $std->dob=$req->dob;
-                $std->larary=$req->larary;
-                $std->gender=$req->gender;
-                $std->phone=$req->phone;
-                $std->address=$req->address;
+                $std->fill($req->all());
                 $std->save();
             } else {
                 $dt=new Detail();
                 $dt->id_staff=$id;
-                $dt->dob=$req->dob;
-                $dt->larary=$req->larary;
-                $dt->gender=$req->gender;
-                $dt->phone=$req->phone;
-                $dt->address=$req->address;
+                $dt->fill($req->all());
                 $dt->save();
             }
-        
+            
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -174,14 +166,20 @@ class UserController extends Controller
             $profile->email=$req->email;
             $profile->save();
             $detailProfile=Detail::where('id_staff', Auth::user()->id)->first();
-            $detailProfile->phone=$req->phone;
-            $detailProfile->address=$req->address;
-            $detailProfile->save();
+            if ($detailProfile) {
+                $detailProfile->id_staff=Auth::user()->id;
+                $detailProfile->fill($req->all());
+                $detailProfile->save();
+            }else{
+                $detail=new Detail();
+                $detail->id_staff=Auth::user()->id;
+                $detail->fill($req->all());
+                $detail->save();
+            }
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             throw new Exception("Error Processing Request", 1);
-            
         }
         return redirect()->back();
     }

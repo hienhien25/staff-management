@@ -63,6 +63,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     //Profile
     Route::get('profile/{id}.html', 'UserController@getProfile')->name('profile');
     Route::post('profile', 'UserController@postEditProfile')->name('profile');
+    Route::post('update-contact-information','ProfileController@postUpdateInformation')->name('admin.updateContactInformation');
     //Checkin
     Route::get('checkin', 'CheckinController@getCheckin')->name('admin.checkin');
     Route::post('post-checkin', 'CheckinController@postCheckin')->name('admin.checkin');

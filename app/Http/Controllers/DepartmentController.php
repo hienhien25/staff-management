@@ -41,13 +41,13 @@ class DepartmentController extends Controller
         DB::beginTransaction();
         try {
             $de= new Department();
-            $de->department_name=$req->department_name;
-            $de->quantity=0;
+            $de->fill(['department_name'=>$req->department_name,'quantity'=>0]);
             if (!$de->save()) {
                 throw new Exception("System Error", 1);
             }
             //dd($de->id);
             $position=new Position();
+            /*$position->fill(['id_department'=>$de->id,'position_name'=>$req->position,'description'=>'Vị trí mới thiêt lập']);*/
             $position->id_department=$de->id;
             $position->position_name=$req->position;
             $position->description='Vị trí mới thiêt lập ';
@@ -73,7 +73,7 @@ class DepartmentController extends Controller
     public function postDelete(Request $req)
     {
         $id=$req->id;
-        dd($id);
+        //dd($id);
         $de=Department::find($id);
         if (!$de->delete()) {
             throw new Exception("System Error", 1);

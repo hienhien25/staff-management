@@ -49,8 +49,7 @@ class PositionController extends Controller
     public function postEdit(Request $req, $id)
     {
         $pos=Position::find($id);
-        $pos->position_name=$req->position_name;
-        $pos->description=$req->description;
+        $pos->fill($req->all());
         if (!$pos->save()) {
             throw new Exception("System Error ", 1);
         }
@@ -59,7 +58,7 @@ class PositionController extends Controller
     public function getEditPosition($id)
     {
         $position=Position::where('id',$id)->get();
-        dd($position);
+        //dd($position);
         return response()->json(['position_name'=>$position->position_name,'description'=>$position->description]);
     }
 }

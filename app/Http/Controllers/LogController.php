@@ -81,7 +81,8 @@ class LogController extends Controller
         DB::beginTransaction();
         try {
             $id=$req->id;
-            //dd($req->start);
+            //dd($id);
+            //dd($req->finish);
             $timelog=TimeLog::where('id', $id)->first();
             //dd($timelog);
             $m=Carbon::now()->month;
@@ -96,48 +97,58 @@ class LogController extends Controller
                     ->where('tbltimelog.id', $id)
                     ->where('tblstatistic.id_staff',$timelog->user_id)
                     ->where('tbltimelog.check_date', date('Y-m-d'))
-                    ->select('tblstatistic.*', 'tbltimelog.*');
+                    ->select('tblstatistic.*', 'tbltimelog.*','tblstatistic.id as id_stat');
             $chk2 = clone $chk;
             $chk = $chk->first();
-            //dd($chk);
             //dd($chk);
             // Lấy ra record trong bảng checkin để thực hiện update
             $checkin=DB::table('tblcheckin')
                     ->join('tblstatistic', 'tblcheckin.id_statist', '=', 'tblstatistic.id')
                     ->where('tblcheckin.check_date', $timelog->check_date)
                     ->where('tblstatistic.id_staff', $timelog->user_id)
-                    ->update([
+                    ->select('tblcheckin.*','tblstatistic.*','tblcheckin.id as id_check');
+                    /*->update([
                         'start_hour' => $req->start,
                         'finish_hour' => $req->finish
-                    ]);
+                    ]);*/
+            $checkin2=clone $checkin;
+            $checkin=$checkin->first();
             //dd($checkin);
-            // $checkin->start_hour=$req->start;
-            // $checkin->finish_hour=$req->finish;
-            // $checkin->save();
+            $check=Checkin::where('id',$checkin->id_check)->first();
+            //dd($check);
+            $check->start_hour=$req->start;
+            $check->finish_hour=$req->finish;
+            if(!$check->save())
+            {
+                throw new Exception("Error Processing Request", 1);
+                
+            }
             $stat=DB::table('tblcheckin')
                 ->join('tblstatistic', 'tblcheckin.id_statist', '=', 'tblstatistic.id')
                 ->select(DB::raw(' SUM(MINUTE(`finish_hour` - `start_hour`)) as total,id_statist'))
                 ->where('tblstatistic.id_month', $mon->id)
-                ->where('id_statist', $chk->id)
+                ->where('id_statist', $chk->id_stat)
                 ->groupBy('id_statist')
-                ->first();//dd($stat);
+                ->get();dd($stat);
             $record=DB::table('tblcheckin')
                 ->join('tblstatistic', 'tblcheckin.id_statist', '=', 'tblstatistic.id')
                 ->where('tblstatistic.id_month', $mon->id)
-                ->where('id_statist', $chk->id)
+                ->where('id_statist', $chk->id_stat)
+                ->where('tblcheckin.status',1)
                 ->count();
             //dd($record);
             //dd($stat->total);
+            //dd($record*8*60-$stat->total);
             $chk2->update([
                 'total_working_hour' => $stat->total,
                 'total_leave_hour' => $record*8*60-$stat->total
             ]);
-            //dd($record*8*60-$stat->total);
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             throw new Exception("Error Processing Request", 1);
         }
+       // return redirect()->back();
     }
     public function deleteTimeLog(Request $req)
     {
