@@ -125,11 +125,11 @@ class LogController extends Controller
             }
             $stat=DB::table('tblcheckin')
                 ->join('tblstatistic', 'tblcheckin.id_statist', '=', 'tblstatistic.id')
-                ->select(DB::raw(' SUM(MINUTE(`finish_hour` - `start_hour`)) as total,id_statist'))
+                ->select(DB::raw(' SUM(TIME_TO_SEC(TIMEDIFF(`finish_hour`, `start_hour`))) as total,id_statist'))
                 ->where('tblstatistic.id_month', $mon->id)
                 ->where('id_statist', $chk->id_stat)
                 ->groupBy('id_statist')
-                ->get();dd($stat);
+                ->first();//dd($stat);
             $record=DB::table('tblcheckin')
                 ->join('tblstatistic', 'tblcheckin.id_statist', '=', 'tblstatistic.id')
                 ->where('tblstatistic.id_month', $mon->id)
@@ -138,17 +138,23 @@ class LogController extends Controller
                 ->count();
             //dd($record);
             //dd($stat->total);
-            //dd($record*8*60-$stat->total);
+            //dd($record*8*60*60-$stat->total);
+            if($record*8*60*60-$stat->total<=0)
+            {
+                $totalleave=0;
+            }else{
+                $totalleave=$record*8*60*60-$stat->total;
+            }
             $chk2->update([
                 'total_working_hour' => $stat->total,
-                'total_leave_hour' => $record*8*60-$stat->total
+                'total_leave_hour' => $totalleave
             ]);
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             throw new Exception("Error Processing Request", 1);
         }
-       // return redirect()->back();
+     return response()->json(['success'=>true]);
     }
     public function deleteTimeLog(Request $req)
     {

@@ -10,9 +10,9 @@
 			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 149px;">Finish_hour</th>
 			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 149px;">Total</th>
 			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 149px;">Status</th>
-			@if(Auth::user()->role==1)
+			<!-- @if(Auth::user()->role==1)
 			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 105px;">Action</th>
-			@endif
+			@endif -->
 		</tr>
 	</thead>
 
@@ -25,9 +25,9 @@
 			<th rowspan="1" colspan="1">Finish_hour</th>
 			<th rowspan="1" colspan="1">Total</th>
 			<th>Status</th>
-			@if(Auth::user()->role==1)
+			<!-- @if(Auth::user()->role==1)
 			<th rowspan="1" colspan="1">Action</th>
-			@endif
+			@endif -->
 		</tr>
 	</tfoot>
 	<tbody role="alert" aria-live="polite" aria-relevant="all">
@@ -43,8 +43,11 @@
                 $start=\Carbon\Carbon::create($u->start_hour);
                 $finish=\Carbon\Carbon::create($u->finish_hour);
                 $totalperday=$finish->diffInMinutes($start);
-                $total=$totalperday/60;
-                echo round($total)."hours";
+                $total=$totalperday*60;
+                $h=$total/3600;
+                $m=($total%3600)/60;
+                $s=$m%60;
+                echo round($h).":".round($m).":".$s;
                 ?>
 			</td>
 			<td>
@@ -54,7 +57,7 @@
 				<?php echo "Checkout";?>
 				@endif
 			</td>
-			@if(Auth::user()->role==1)
+			<!-- @if(Auth::user()->role==1)
 			<td class=" " style="width:200px;">
 				<div class="btn-group">
 					<button type="button" class="btn btn-success">Action</button>
@@ -64,11 +67,11 @@
 					</button>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="admin/edit-checkout/{{$u->id}}.html">Edit</a></li>
-						<li><a class="btn btn-danger waves-effect waves-light remove-record" data-toggle="modal" data-url="{!! URL::route('admin.deleteCheckin', $u->id) !!}" data-id="{{$u->id}}" data-target="#custom-width-modal">Delete</a></li>
+						<li><a class="btn btn-default waves-effect waves-light remove-record" data-toggle="modal" data-url="{!! URL::route('admin.deleteCheckin', $u->id) !!}" data-id="{{$u->id}}" data-target="#custom-width-modal">Delete</a></li>
 					</ul>
 				</div>
 			</td>
-			@endif
+			@endif -->
 		</tr>
 		@endforeach
 	</tbody>
@@ -81,7 +84,7 @@
 	</div>
 </div>
 <!-- form delete -->
-<form action="{{route('admin.deleteCheckin', $u->id)}}"  class="remove-record-model" method="post">
+<!-- <form action="{{route('admin.deleteCheckin', $u->id)}}"  class="remove-record-model" method="post">
     @csrf
     <div id="custom-width-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog" style="width:35%;">
@@ -100,7 +103,7 @@
             </div>
         </div>
     </div>
-</form>
+</form> -->
 @endsection
 @section('pagejs')
 <script type="text/javascript">

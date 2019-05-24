@@ -68,8 +68,14 @@
 										<td class="month" id="month" value="{{$m->month}}">{{$m->month}}</td>
 										<td ><img src="{{$m->image}}" style="width:30px; height: 30px;text-align: center;"></td>
 										<td>{{$m->fullname}}</td>
-										<td><?php $total=$m->total_working_hour; $t=$total/60; echo round($t)."hours";?></td>
-										<td><?php $total=$m->total_leave_hour; $t=$total/60; echo round($t)."hours";?></td>
+										<td><?php $total=$m->total_working_hour; $t=$total/3600; 
+										$min=($total%3600)/60;
+										$s=$min%60;
+										echo round($t).":".round($min).":".$s;?></td>
+										<td><?php $total=$m->total_leave_hour; $t=$total/3600; 
+										$m=($total%3600)/60;
+										$s=$min%60;
+										echo round($t).":".round($m).":".$s;?></td>
 									</tr>
 									@endforeach
 								</tbody>

@@ -67,8 +67,14 @@
 					<tr class="odd">
 						<td class="  sorting_1" style="width:50px;">{{$loop->iteration}}</td>
 						<td class=" ">{{$stat->month}}</td>
-						<td><?php $total=$stat->total_working_hour; $t=$total/60; echo round($t)."hours";?></td>
-						<td><?php $total=$stat->total_leave_hour; $t=$total/60; echo round($t)."hours";?></td>
+						<td><?php $total=$stat->total_working_hour; $t=$total/3600; 
+										$min=($total%3600)/60;
+										$s=$min%60;
+										echo round($t).":".round($min).":".$s;?></td>
+						<td><?php $total=$stat->total_leave_hour; $t=$total/3600; 
+										$m=($total%3600)/60;
+										$s=$min%60;
+										echo round($t).":".round($m).":".$s;?></td>
 					</tr>
 					@endforeach
 				</tbody>

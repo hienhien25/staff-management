@@ -13,6 +13,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Writer_Excel2007;
 use PHPExcel_Settings;
+use App\TimeLog;
 
 class StatisticController extends Controller
 {
@@ -38,8 +39,8 @@ class StatisticController extends Controller
      ->select('users.*', 'tblcheckin.*', 'tblstatistic.*', 'tblcheckin.start_hour as start_hour', 'tblcheckin.finish_hour as finish_hour', 'tblcheckin.check_date as check_date', 'users.fullname as fullname', 'tblcheckin.status as status')
      ->paginate(12);
         //dd($user);
-        $month=\App\Time::all();
-        return view('layout.user.list_checkout_per_day', compact('user', 'month'));
+        $mon=\App\Time::all();
+        return view('layout.user.list_checkout_per_day', compact('user', 'mon'));
     }
     public function getPersonal()
     {
@@ -73,11 +74,17 @@ class StatisticController extends Controller
 
         foreach ($stat as $t) {
             $rowCount++;
+            $total=$t->total_working_hour/3600;
+            $m=($t->total_working_hour%3600)/60;
+            $s=$m%60;
+            $totalleave=$t->total_leave_hour/3600;
+            $min=($t->total_leave_hour%3600)/60;
+            $se=$min%60;
             $sheet->setCellValue('A'.$rowCount, $rowCount-1);
             $sheet->setCellValue('B'.$rowCount, $t->month);
             $sheet->setCellValue('C'.$rowCount, $t->fullname);
-            $sheet->setCellValue('D'.$rowCount,round( $t->total_working_hour/60).'hours');
-            $sheet->setCellValue('E'.$rowCount, round($t->total_leave_hour/60).'hours');
+            $sheet->setCellValue('D'.$rowCount,round( $total).':'.round($m).':'.$s);
+            $sheet->setCellValue('E'.$rowCount, round($totalleave).':'.round($min).':'.$se);
         }
         $filename='statistics.xlsx';
         header("Content-Type: application/force-download");
@@ -91,5 +98,27 @@ class StatisticController extends Controller
         $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
         $objWriter->save('php://output');
         exit;
+    }
+    public function getMonth()
+    {
+        $month=\App\Time::orderBy('id','desc')->get();
+        return view('layout.month_list',compact('month'));
+    }
+    public function getDate($id, $month)
+    {
+        $day=DB::table('tbltimelog')
+             ->select( 'check_date')
+            ->whereRaw('MONTH(`check_date`) = ?', $month)
+            ->groupBy('tbltimelog.check_date')
+            ->get();
+        //dd($day);
+        return view('layout.date_list',compact('day'));
+    }
+    public function getTimeLogPerDay($date)
+    {
+        //dd($date);
+        $tl=TimeLog::where('check_date',$date)->paginate(12);
+        //dd($tl);
+        return view('layout.timelog_per_day',compact('tl'));
     }
 }

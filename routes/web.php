@@ -97,4 +97,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::get('search-checkout-per-day', 'StatisticController@getSearch')->name('admin.search');
     Route::get('statistic-list-personal', 'StatisticController@getPersonal')->name('admin.statisticPersonal');
     Route::get('export-statistic-per-month', 'StatisticController@getExport')->name('admin.exportDataStatistic');
+    Route::get('statistics-month-list','StatisticController@getMonth')->name('admin.monthList');
+    Route::get('statistics-date-list/{id_month}/{month}.html','StatisticController@getDate')->name('admin.dateList');
+    Route::get('statistics-timelog-per-day-list/{date}','StatisticController@getTimeLogPerDay')->name('admin.timeLogPerDay');
 });
