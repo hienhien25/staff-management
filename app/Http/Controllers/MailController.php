@@ -17,16 +17,16 @@ class MailController extends Controller
     public function postSendMail(Request $req)
     {
         $data=['fullname'=>$req->user_recive,'title'=>$req->title,'content'=>$req->content];
-        //$files = $req->file('files');
+        $files = $req->file('document');
         try {
-            Mail::send('email', $data, function ($msg) use ($data/*,$files*/) {
+            Mail::send('email', $data, function ($msg) use ($data,$files) {
                 $msg->from('tienphamnb123@gmail.com', 'Pham Tien');
                 $msg->to($data['fullname']);
                 $msg->subject($data['title']);
-                /*$msg->attach($files->getRealPath(), [
+                $msg->attach($files->getRealPath(), [
                     'as' => $files->getClientOriginalName(),
-                    'mime' => $files->getMimeType()
-                ]);*/
+                    'mime' => $files->getClientMimeType()
+                ]);
             });
         } catch (Exception $e) {
             throw new Exception("System Error ", 1);
@@ -42,7 +42,19 @@ class MailController extends Controller
     }
     public function getMailbox()
     {
-        $email=Email::where('user_id', Auth::user()->id)->get();
-        return view('layout.mailbox', compact('email'));
+        $email=Email::where('user_id', Auth::user()->id)->paginate(12);
+        return view('layout.sent-mail', compact('email'));
+    }
+    public function getSearchMail(Request $req)
+    {
+        $search=Email::where('title','like','%'.$req->keyword.'%')->paginate(12);
+        $count=count($search);
+        return view('layout.search_mail',compact('search','count'));
+    }
+    public function getMailReceived()
+    {
+        $mail_received=Email::where('user_recive',Auth::user()->email)->paginate(12);
+        //dd($mail_received);
+        return view('layout.mail-received',compact('mail_received'));
     }
 }

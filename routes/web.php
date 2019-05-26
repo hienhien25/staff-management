@@ -62,8 +62,8 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::get('ajax-department/{iddepartment}', 'AjaxController@getDepartment')->name('admin.ajaxDepartment');
     //Profile
     Route::get('profile/{id}.html', 'UserController@getProfile')->name('profile');
-    Route::post('profile', 'UserController@postEditProfile')->name('profile');
-    Route::post('update-contact-information','ProfileController@postUpdateInformation')->name('admin.updateContactInformation');
+    Route::post('profile/{id}.html', 'UserController@postEditProfile')->name('profile');
+    Route::post('update-contact-information/{id}.html','ProfileController@postUpdateInformation')->name('admin.updateContactInformation');
     //Checkin
     Route::get('checkin', 'CheckinController@getCheckin')->name('admin.checkin');
     Route::post('post-checkin', 'CheckinController@postCheckin')->name('admin.checkin');
@@ -79,6 +79,8 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::get('send-email', 'MailController@getSendMail')->name('admin.sendMail');
     Route::post('send-email', 'MailController@postSendMail')->name('admin.sendMail');
     Route::get('mailbox', 'MailController@getMailbox')->name('admin.mailbox');
+    Route::get('search-mail-box','MailController@getSearchMail')->name('admin.searchMail');
+    Route::get('mail-received','MailController@getMailReceived')->name('admin.mailReceived');
     //Regisster account by admin
     Route::get('add-member', 'UserController@getAddMember')->name('admin.addMember');
     Route::post('add-member', 'UserController@postAddMember')->name('admin.addMember');

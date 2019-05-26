@@ -96,7 +96,7 @@ class LogController extends Controller
                     ->join('tbltimelog', 'tblstatistic.id_staff', '=', 'tbltimelog.user_id')
                     ->where('tbltimelog.id', $id)
                     ->where('tblstatistic.id_staff',$timelog->user_id)
-                    ->where('tbltimelog.check_date', date('Y-m-d'))
+                    ->where('tbltimelog.check_date', $timelog->check_date)
                     ->select('tblstatistic.*', 'tbltimelog.*','tblstatistic.id as id_stat');
             $chk2 = clone $chk;
             $chk = $chk->first();

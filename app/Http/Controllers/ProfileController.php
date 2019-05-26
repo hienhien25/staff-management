@@ -85,12 +85,12 @@ class ProfileController extends Controller
        
         return redirect(route('activeSuscess'))->with('message', 'Vui lòng kiểm tra lại email để hoàn tất việc đăng kí!');
     }
-    public function postUpdateInformation(Request $req)
+    public function postUpdateInformation(Request $req,$id)
     {
-        $user=User::where('id',Auth::user()->id)->first();
+        $user=User::where('id',$id)->first();
         $user->fill(['email'=>$req->email]);
         $user->save();
-        $detail=Detail::where('id_staff',Auth::user()->id)->first();
+        $detail=Detail::where('id_staff',$id)->first();
         $detail->fill(['phone'=>$req->phone]);
         $detail->save();
         return redirect()->back();

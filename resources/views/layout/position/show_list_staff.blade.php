@@ -55,7 +55,7 @@
                                 <td class=" ">
                                     <a href="admin/edit-staff/{{$s->id}}.html" class="btn btn-info">Edit</a>
                                     <a href="#" class="button" data-id="{{$s->id}}">Delete</a>
-                                    <a href="#" class="btn btn-primary">Profile</a>
+                                    <a href="admin/profile/{{$s->id}}.html" class="btn btn-primary">Profile</a>
                                 </td>
                                 @endif
                             </tr>

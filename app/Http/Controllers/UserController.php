@@ -156,23 +156,23 @@ class UserController extends Controller
             throw new Exception("Error Processing Request", 1);
         }
     }
-    public function postEditProfile(Request $req)
+    public function postEditProfile(Request $req,$id)
     {
         DB::beginTransaction();
         try {
-            $profile=User::where('id', Auth::user()->id)->first();
+            $profile=User::where('id', $id)->first();
             //dd($profile);
             $profile->fullname=$req->fullname;
             $profile->email=$req->email;
             $profile->save();
-            $detailProfile=Detail::where('id_staff', Auth::user()->id)->first();
+            $detailProfile=Detail::where('id_staff', $id)->first();
             if ($detailProfile) {
-                $detailProfile->id_staff=Auth::user()->id;
+                $detailProfile->id_staff=$id;
                 $detailProfile->fill($req->all());
                 $detailProfile->save();
             }else{
                 $detail=new Detail();
-                $detail->id_staff=Auth::user()->id;
+                $detail->id_staff=$id;
                 $detail->fill($req->all());
                 $detail->save();
             }

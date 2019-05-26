@@ -70,7 +70,7 @@
 			<div class="col-md-12">
 				<div class="user-info-list panel panel-default">
 					<div class="panel panel-flat">
-						<form action="{{route('admin.updateContactInformation')}}" method="post" >
+						<form action="admin/update-contact-information/{{$pr->id}}.html" method="post" >
 						@csrf
 						<div class="panel-heading panel-heading-divider"><b>THÔNG TIN LIÊN HỆ</b></div>
 						<div class="panel-body">
@@ -166,7 +166,7 @@
 					</div>
 				</div>
 				<div class="panel panel-flat" >
-					<form action="admin/profile" method="post" >
+					<form action="admin/profile/{{$pr->id}}.html" method="post" >
 					@csrf
 					<div class="panel-heading panel-heading-divider" style="padding-left: 30px;"><b>BẢNG CẬP NHẬT</b></div>
 					<input type="hidden" value="{{$depa->id}}" name="department">
