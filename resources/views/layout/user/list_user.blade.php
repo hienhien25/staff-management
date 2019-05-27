@@ -63,15 +63,12 @@
                                 </td>
                                 @endif
                                 <td class=" " style="width:200px;">
-                                    <form method="POST" class="form-delete" action="admin/delete-staff/{{$u->id}}.html">
-                                        @csrf
                                         <a href="admin/edit-staff/{{$u->id}}.html" class="btn btn-info">Update</a>
-                                        <input type="hidden" name="idpos" value="{{$u->id}}"/>
-                                        <input type="hidden" name="request_name" value="delete_position"/>
+                                        <!-- <input type="hidden" name="idpos" value="{{$u->id}}"/>
+                                        <input type="hidden" name="request_name" value="delete_position"/> -->
                                         @if(Auth::user()->role==1)
-                                        <a href="admin/delete-staff/{{$u->id}}.html" id="delete" class="btn btn-danger">Delete</a>
+                                        <a  class="btn btn-danger" data-id="{{$u->id}}">Delete</a>
                                         @endif
-                                    </form>
                                 </td>
                             </tr>   
                             @endforeach
@@ -110,20 +107,34 @@
 
         });
     }
-    $(document).ready(function(){
-        $('.btn-danger').click(function(){
-            $(this).parent().submit();
-            return false;
+    $(document).on('click ','.btn-danger',function(e){
+    e.preventDefault();
+    var id=$(this).data('id');
+    var url="http://staff-manage.local/admin/delete-staff";
+    console.log(url);
+    swal({
+        title: "Are you sure!",
+        type: "error",
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes!",
+        showCancelButton: true,
+    },
+    function() {
+        $.ajax({
+            type: "POST",
+            headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            url: url,
+            data: {id:id},
+            success: function (data) {
+                if(data['success'])
+                {
+                    setTimeout(function () { location.reload(1); }, 1000);
+                    alert('Deleted!');
+                }
+            }         
         });
-         $('.form-delete').submit(function(){
-          if(!confirm('Are you sure you want to delete !')){
-            return false;
-        }
-        $(this).append('<input type="hidden" name="redirect" value="'+window.location.href+'"/>');
-        return true;
-
     });
-    });
+});
     
 </script>
 @endsection

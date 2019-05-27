@@ -1,11 +1,9 @@
-@extends('layout.user.show_checkin_list')
-@section('main')
+@extends('master')
+@section('content')
 <table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
 	<thead>
 		<tr role="row">
 			<th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 176px;">STT</th>
-			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 260px;">Avatar</th>
-			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 260px;">Username</th>
 			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 233px;">Start_hour</th>
 			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 149px;">Finish_hour</th>
 			<th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 149px;">Total</th>
@@ -19,8 +17,6 @@
 	<tfoot>
 		<tr>
 			<th rowspan="1" colspan="1">STT</th>
-			<th rowspan="1" colspan="1">Avatar</th>
-			<th rowspan="1" colspan="1">Username</th>
 			<th rowspan="1" colspan="1">Start_hour</th>
 			<th rowspan="1" colspan="1">Finish_hour</th>
 			<th rowspan="1" colspan="1">Total</th>
@@ -31,11 +27,9 @@
 		</tr>
 	</tfoot>
 	<tbody role="alert" aria-live="polite" aria-relevant="all">
-		@foreach($user as $u)
+		@foreach($search as $u)
 		<tr class="odd">
 			<td class="  sorting_1" style="width:50px;">{{$loop->iteration}}</td>
-			<td><img src="{{$u->image}}" style="width:30px; height: 30px;"></td>
-			<td class=" ">{{$u->fullname}}</td>
 			<td class=" ">{{$u->start_hour}}</td>
 			<td class=" ">{{$u->finish_hour}}</td>
 			<td class=" ">
@@ -79,7 +73,7 @@
 <div class="col-xs-6">
 	<div class="dataTables_paginate paging_bootstrap">
 		<ul class="pagination">
-			{{$user->links()}}
+			{{$search->links()}}
 		</ul>
 	</div>
 </div>

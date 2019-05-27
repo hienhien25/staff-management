@@ -3,7 +3,7 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
 @endphp
 <!-- Left side column. contains the logo and sidebar -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<aside class="left-side sidebar-offcanvas">                
+<aside class="left-side sidebar-offcanvas" style="min-height: 879px;">                
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- Sidebar user panel -->
@@ -36,22 +36,21 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
             </li>
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-laptop"></i>
-                    <span>Department</span>
-                    <i class="fa pull-right fa-angle-left"></i>
+                    <i class="fa fa-folder"></i> <span>Department</span>
+                    <i class="fa pull-right fa-angle-left" ></i>
                 </a>
                 <ul class="treeview-menu" >
-                    <li><a href="{{route('admin.departmentList')}}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i>Department List</a></li>
+                    <li ><a href="{{route('admin.departmentList')}}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i>Department List</a></li>
                     
                 </ul>
             </li>
             <li >
                 <a href="{{route('admin.userList')}}">
-                 <i class="fa fa-th"></i> <span>User List</span> 
-             </a>
-         </li>
-         @if(Auth::user()->role==1)
-         <li class="treeview">
+                   <i class="fa fa-th"></i> <span>User List</span> 
+               </a>
+           </li>
+           @if(Auth::user()->role==1)
+           <li class="treeview">
             <a href="#">
                 <i class="fa fa-laptop"></i>
                 <span>Statistics</span>
@@ -66,24 +65,39 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
         @elseif(Auth::user()->role==0)
         <li >
             <a href="{{route('admin.statisticPersonal')}}">
-             <i class="fa fa-th"></i> <span>Statistics</span> 
-         </a>
-     </li>
-     @endif
+               <i class="fa fa-th"></i> <span>Statistics</span> 
+           </a>
+       </li>
+       @endif
 
-     <li>
+       <li>
         <a href="{{route('admin.mailbox')}}">
             <i class="fa fa-envelope"></i> <span>Mail</span>
             <!-- <small class="badge pull-right bg-yellow">12</small> -->
         </a>
     </li>
+    @if(Auth::user()->role==0)
     <li >
         <a href="{{route('admin.log')}}">
             <i class="fa fa-edit"></i> <span>Blog</span>
         </a>
     </li>
+    @elseif(Auth::user()->role==1)
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>Blog</span>
+            <i class="fa pull-right fa-angle-left"></i>
+        </a>
+        <ul class="treeview-menu" >
+            <li><a href="{{route('admin.log')}}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i>Action Log</a></li>
+            <li><a href="{{route('admin.monthList')}}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i>Time Log</a></li>
+
+        </ul>
+    </li>
+    @endif
     <li>
-     <div class="btn-group" style="width: 150px; align-items: center;">
+       <div class="btn-group" style="width: 150px; align-items: center;">
         <button type="button" class="btn btn-warning">Action</button>
         <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
@@ -102,11 +116,11 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
                 <li><a   data-url="{!! URL::route('admin.checkin') !!}" data-id="{{Auth::user()->id}}" id="btncheckin" class="btncheckin
                     ">Checkin</a></li>
                     <?php
-            } elseif (isset($check)&&$check->status==0) {
-                ?>
+                } elseif (isset($check)&&$check->status==0) {
+                    ?>
                     <li><a  data-url="{!! URL::route('admin.checkout') !!}" data-id="{{Auth::user()->id}}" id="btncheckout" class="btncheckout">Checkout</a></li>
                     <?php
-            }
+                }
                 ?>
 
 
@@ -166,7 +180,7 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
               if (isConfirm) {
                 //alert('success');
                  //swal("Checkin!", "Your imaginary file has been deleted.", "success");
-                $.ajax({
+                 $.ajax({
                     type:'POST',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     url:"<?php echo url('/admin/post-checkin'); ?>",
@@ -174,11 +188,12 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
                     success:function(data){
                         if(data['success']){
                             swal("Checkin!", "Successfully!", "success");
+                            setTimeout(function () { location.reload(1); }, 1000);
                         }
                     }
                 });
-                
-            } else {
+
+             } else {
                 swal("Cancelled", "Your imaginary file is safe :", "error");
             }
         });
@@ -188,20 +203,20 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
     $('.btncheckout').click(function(){
         var finish_hour=moment().format('HH:mm');
         swal({
-              title: "Are you sure?",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonClass: "btn-danger",
-              confirmButtonText: "Yes",
-              cancelButtonText: "Cancel",
-              closeOnConfirm: false,
-              closeOnCancel: false
-          },
-          function(isConfirm) {
-              if (isConfirm) {
+          title: "Are you sure?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "btn-danger",
+          confirmButtonText: "Yes",
+          cancelButtonText: "Cancel",
+          closeOnConfirm: false,
+          closeOnCancel: false
+      },
+      function(isConfirm) {
+          if (isConfirm) {
                 //alert('success');
                  //swal("Checkin!", "Your imaginary file has been deleted.", "success");
-                $.ajax({
+                 $.ajax({
                     type:'POST',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     url:"<?php echo url('/admin/post-checkout'); ?>",
@@ -209,11 +224,12 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
                     success:function(data){
                         if(data['success']){
                             swal("Checkout!", "Successfully!", "success");
+                            setTimeout(function () { location.reload(1); }, 1000);
                         }
                     }
                 });
-                
-            } else {
+
+             } else {
                 swal("Cancelled", "Your imaginary file is safe :)", "error");
             }
         });
@@ -221,3 +237,4 @@ $defaultImg = Auth::user()->image == null ? asset('images/avatarDefault.jpeg') :
 
 </script>
 @endsection
+

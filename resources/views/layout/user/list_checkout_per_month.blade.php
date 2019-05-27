@@ -32,7 +32,9 @@
 								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 									Month  <span class="caret"></span></button>
 									<ul class="dropdown-menu" role="menu">
-										
+										@foreach($mon as $mo)
+										<li ><a href="admin/search-statistic-each-month/{{$mo->id}}.html">{{$mo->month}}</a></li>
+										@endforeach
 									</ul>
 								</div>
 							</div>

@@ -15,6 +15,7 @@ use App\Profile;
 use Carbon\Carbon;
 use App\Http\Requests\SaveStaffRequest;
 use App\PasswordResset;
+use App\Checkin;
 
 class UserController extends Controller
 {
@@ -112,14 +113,16 @@ class UserController extends Controller
         $pos=Position::where('id_department', $depa->id)->first();
         return view('layout.user.profile', compact('pr', 'dp', 'depa', 'pos'));
     }
-    public function getDelete($id)
+    public function postDelete(Request $req)
     {
+        //dd($req->id);
+        $id=$req->id;
         $ds=User::find($id);
         //dd($ds);
         if (!$ds->delete()) {
             throw new Exception("Error ", 1);
         }
-        return redirect()->back();
+        return response()->json(['success'=>true]);
     }
     public function getAddMember()
     {
@@ -182,5 +185,16 @@ class UserController extends Controller
             throw new Exception("Error Processing Request", 1);
         }
         return redirect()->back();
+    }
+    public function getSearchStatistic(Request $req)
+    {
+        $search=DB::table('tblcheckin')
+                ->join('tblstatistic','tblcheckin.id_statist','=','tblstatistic.id')
+                ->where('tblstatistic.id_staff',Auth::user()->id)
+                ->where('tblcheckin.check_date',$req->keyword)
+                ->paginate(12);
+        //dd($search);
+        $count=count($search);
+        return view('layout.user.search_statistic_personal',compact('search','count'));
     }
 }

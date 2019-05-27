@@ -121,4 +121,67 @@ class StatisticController extends Controller
         //dd($tl);
         return view('layout.timelog_per_day',compact('tl'));
     }
+    public function getStatisticEachMonth($id_month)
+    {
+        $statist=DB::table('tblstatistic')
+       ->join('tbltime', 'tblstatistic.id_month', '=', 'tbltime.id')
+       ->rightjoin('users', 'tblstatistic.id_staff', '=', 'users.id')
+       ->where('tblstatistic.id_month', $id_month)
+       ->select('tblstatistic.*', 'tbltime.*', 'users.*', 'tbltime.month as month', 'tblstatistic.id_staff as id_staff', 'tblstatistic.total_working_hour as total_working_hour', 'users.fullname as fullname')
+       ->paginate(12);
+       //dd($statist);
+       $mon=\App\Time::all();
+       return view('layout.user.statistic_each_month',compact('statist','mon'));
+
+    }
+    public function getShowStaticticList()
+    {
+        $mon=\App\Time::all();
+        return view('layout.user.show_checkin_list',compact('mon'));
+    }
+    public function getExportPersonal(Request $req)
+    {
+        $excel=new PHPExcel();
+        $stat=DB::table('tblstatistic')
+                ->join('tbltime','tblstatistic.id_month','=','tbltime.id')
+                ->where('tblstatistic.id_staff',Auth::user()->id)
+                ->select('tblstatistic.*', 'tbltime.*', 'tbltime.month as month', 'tblstatistic.id_staff as id_staff', 'tblstatistic.total_working_hour as total_working_hour')
+                ->get();
+        dd($stat);
+        $excel->setActiveSheetIndex(0);
+        $sheet=$excel->getActiveSheet()->setTitle('Statistics List');
+        $rowCount=1;
+        $sheet->setCellValue('A'.$rowCount, 'No');
+        $sheet->setCellValue('B'.$rowCount, 'Month');
+        $sheet->setCellValue('C'.$rowCount, 'Username');
+        $sheet->setCellValue('D'.$rowCount, 'Total working hours');
+        $sheet->setCellValue('E'.$rowCount, 'Total leave hours');
+
+        foreach ($stat as $t) {
+            $rowCount++;
+            $total=$t->total_working_hour/3600;
+            $m=($t->total_working_hour%3600)/60;
+            $s=$m%60;
+            $totalleave=$t->total_leave_hour/3600;
+            $min=($t->total_leave_hour%3600)/60;
+            $se=$min%60;
+            $sheet->setCellValue('A'.$rowCount, $rowCount-1);
+            $sheet->setCellValue('B'.$rowCount, $t->month);
+            $sheet->setCellValue('C'.$rowCount, $t->fullname);
+            $sheet->setCellValue('D'.$rowCount,round( $total).':'.round($m).':'.$s);
+            $sheet->setCellValue('E'.$rowCount, round($totalleave).':'.round($min).':'.$se);
+        }
+        $filename='statistics.xlsx';
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="' . $filename . '"');
+        header("Content-Transfer-Encoding: binary");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Pragma: no-cache");
+        $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
 }

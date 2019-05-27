@@ -27,16 +27,18 @@
 				<div class="col-xs-6">
 					<div id="example1_length" class="dataTables_length">
 						<div class="btn-group" >
-							<a type="button" class="btn btn-primary" id="exportData">Export to excel</a>
-							<div class="btn-group">
+							<a type="button" class="btn btn-primary" href="admin/export-statistic-per-month" id="exportData">Export to excel</a>
+							<div class="btn-group" >
 								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 									Month  <span class="caret"></span></button>
-									<ul class="dropdown-menu" role="menu">
-										@foreach($mon as $m )
-										<li><a href="#" >{{$m->month}}</a></li>
+									<ul class="dropdown-menu" role="menu" name="month" id="month"  >
+										@foreach($mon as $mo)
+										<li ><a href="admin/search-statistic-each-month/{{$mo->id}}.html">{{$mo->month}}</a></li>
 										@endforeach
 									</ul>
 								</div>
+							</div>
+							</div>
 							</div>
 						</div>
 						<div class="box-header" >
@@ -59,4 +61,23 @@
 			</div>
 		</div><!-- /.box-body -->
 	</div>
+	@endsection
+@section('pagejs')
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var mon=$('#month').attr('value');
+		//alert(mon);
+		$('#exportData').click(function(){
+			//alert(mon);
+			//$.get("/admin/get-edit-time-log/"+id,function(data){
+			$.ajax({
+				type:'GET',
+				url:"<?php echo url('/admin/export-statistic-per-month'); ?>",
+				data:{'mon':mon},
+				success:function(data){
+					alert('ok');
+				}
+			});
+		});
+	</script>
 	@endsection

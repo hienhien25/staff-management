@@ -56,8 +56,9 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::post('add-staff', 'UserController@postAdd')->name('admin.user.addStaff');
     Route::get('edit-staff/{id}.html', 'UserController@getEdit')->name('admin.user.editStaff');
     Route::post('post-edit-staff/{id}.html', 'UserController@postEdit')->name('admin.user.editStaff');
-    Route::post('delete-staff/{id}', 'UserController@getDelete')->name('admin.user.deleteStaff');
+    Route::post('delete-staff', 'UserController@postDelete')->name('admin.user.deleteStaff');
     Route::post('change-uright','UserController@changeUright')->name('admin.user.changeUright');
+    Route::get('search-statist','UserController@getSearchStatistic')->name('admin.user.searchStatisticPersonal');
     //Ajax
     Route::get('ajax-department/{iddepartment}', 'AjaxController@getDepartment')->name('admin.ajaxDepartment');
     //Profile
@@ -98,8 +99,11 @@ Route::group(['prefix'=>'admin','middleware'=>['admin_login']], function () {
     Route::get('show-checkout-list-per-month', 'StatisticController@getShowListPerMonth')->name('CheckoutListPerMonth');
     Route::get('search-checkout-per-day', 'StatisticController@getSearch')->name('admin.search');
     Route::get('statistic-list-personal', 'StatisticController@getPersonal')->name('admin.statisticPersonal');
+    Route::get('show-statistic-list','StatisticController@getShowStaticticList')->name('admin.showStatistList');
     Route::get('export-statistic-per-month', 'StatisticController@getExport')->name('admin.exportDataStatistic');
+    Route::get('export-statistic-personal','StatisticController@getExportPersonal');
     Route::get('statistics-month-list','StatisticController@getMonth')->name('admin.monthList');
     Route::get('statistics-date-list/{id_month}/{month}.html','StatisticController@getDate')->name('admin.dateList');
     Route::get('statistics-timelog-per-day-list/{date}','StatisticController@getTimeLogPerDay')->name('admin.timeLogPerDay');
+    Route::get('search-statistic-each-month/{id_month}.html','StatisticController@getStatisticEachMonth')->name('admin.statisticEachMonth');
 });

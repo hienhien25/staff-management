@@ -1,24 +1,5 @@
 @extends('master')
 @section('title','personal')
-@section('pagecss')
-<style>
-	table {
-		font-family: arial, sans-serif;
-		border-collapse: collapse;
-		width: 100%;
-	}
-
-	td, th {
-		border: 1px solid #dddddd;
-		text-align: left;
-		padding: 8px;
-	}
-
-	tr:nth-child(even) {
-		background-color: #dddddd;
-	}
-</style>
-@endsection
 @section('content')
 <div class="box">
 	<div class="box-body table-responsive">
@@ -27,13 +8,13 @@
 				<div class="col-xs-6">
 					<div id="example1_length" class="dataTables_length">
 						<div class="btn-group" style="width: 150px; align-items: center;">
-							<button type="button" class="btn btn-warning">Export Data</button>
+							<a href="admin/export-statistic-personal" class="btn btn-warning" id="exportData" >Export Data</a>
 						</div>
 					</div>
 				</div>
 				<div class="box-header" >
 					<div class="row" style="padding-left: 700px;">
-						<form action="" method="get" class="col-sm-4" >
+						<form action="admin/search-statist" method="get" class="col-sm-4" >
 							<div class="input-group input-group-sm" style="width: 300px; margin-top: 10px;margin-bottom: 15px;">
 								<input type="text" class="form-control" name="keyword"  placeholder="Enter YYYY-mm-dd" >
 								<span class="input-group-btn">
@@ -93,3 +74,12 @@
 </div>
 
 @endsection
+<!-- @section('pagejs')
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#exportData').click(function(){
+			alert('ok');
+		});
+	});
+</script>
+@endsection -->

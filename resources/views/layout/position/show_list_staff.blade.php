@@ -1,6 +1,7 @@
 @extends('master')
 @section("title","Staff List")
 @section('content')
+<meta name="csrf-token" content="{{csrf_token()}}">
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
@@ -54,7 +55,7 @@
                                 @if(Auth::user()->role==1)
                                 <td class=" ">
                                     <a href="admin/edit-staff/{{$s->id}}.html" class="btn btn-info">Edit</a>
-                                    <a href="#" class="button" data-id="{{$s->id}}">Delete</a>
+                                    <a  class="btn btn-danger" data-id="{{$s->id}}">Delete</a>
                                     <a href="admin/profile/{{$s->id}}.html" class="btn btn-primary">Profile</a>
                                 </td>
                                 @endif
@@ -77,11 +78,11 @@
 @endsection
 @section('pagejs')
 <script type="text/javascript">
-  $(document).on('click ','.button',function(e){
+  $(document).on('click ','.btn-danger',function(e){
     e.preventDefault();
     var id=$(this).data('id');
-    var url="http://staff-manage.local/admin/delete-staff/"+id;
-   // console.log(url);
+    var url="http://staff-manage.local/admin/delete-staff";
+    console.log(url);
     swal({
         title: "Are you sure!",
         type: "error",
@@ -92,10 +93,15 @@
     function() {
         $.ajax({
             type: "POST",
+            headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             url: url,
             data: {id:id},
             success: function (data) {
-                    //
+                if(data['success'])
+                {
+                    setTimeout(function () { location.reload(1); }, 1000);
+                    alert('Deleted!');
+                }
             }         
         });
     });
